@@ -1,1 +1,37 @@
- 
+{
+  "name": "tushikane-fullstack",
+  "version": "1.0.0",
+  "description": "Tushikane - Humanitarian Community Service Platform",
+  "main": "index.js",
+  "scripts": {
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "server": "cd backend && npm run dev",
+    "client": "cd frontend && npm start",
+    "install-all": "npm install && cd backend && npm install && cd ../frontend && npm install",
+    "build": "cd frontend && npm run build",
+    "start": "cd backend && npm start"
+  },
+  "keywords": [
+    "humanitarian",
+    "community",
+    "service",
+    "volunteer",
+    "help-requests",
+    "mern",
+    "react",
+    "express",
+    "mongodb"
+  ],
+  "author": "Tushikane Team",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^7.6.0"
+  },
+  "workspaces": [
+    "backend",
+    "frontend"
+  ],
+  "dependencies": {
+    "react-router-dom": "^7.6.3"
+  }
+}
