@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import ProjectCard from '../components/ProjectCard';
+import '@/styles/ProjectPulse.css';
+import '@/components/ProjectCard.css';
 import {
   getProjects,
   getDonationStats
@@ -9,13 +11,79 @@ const ProjectPulse = () => {
   const [projects, setProjects] = useState([]);
   const [stats, setStats] = useState({
     activeProjects: 0,
-    completedProjects: 0,
+    ongoingProjects: 0,
+    peopleHelped: 0,
     totalRaised: 0
   });
   const [filters, setFilters] = useState({
     status: 'all',
     category: 'all'
   });
+  const [activeCard, setActiveCard] = useState('active-projects');
+
+  const statsCards = [
+    {
+      id: 'active-projects',
+      icon: '🎯',
+      title: 'Active Projects',
+      value: stats.activeProjects,
+      label: 'Projects'
+    },
+    {
+      id: 'ongoing-projects',
+      icon: '⏳',
+      title: 'Ongoing Projects',
+      value: stats.ongoingProjects,
+      label: 'Projects'
+    },
+    {
+      id: 'people-helped',
+      icon: '👥',
+      title: 'People Helped',
+      value: stats.peopleHelped,
+      label: 'People'
+    },
+    {
+      id: 'money-raised',
+      icon: '💰',
+      title: 'Money Raised',
+      value: stats.totalRaised,
+      label: 'KES'
+    }
+  ];
+
+  const categoryCards = [
+    {
+      id: 'education',
+      icon: '🎓',
+      title: 'Education',
+      description: 'Projects focused on education and learning'
+    },
+    {
+      id: 'healthcare',
+      icon: '🏥',
+      title: 'Healthcare',
+      description: 'Projects focused on healthcare and medical services'
+    },
+    {
+      id: 'water',
+      icon: '💧',
+      title: 'Water',
+      description: 'Projects focused on water and sanitation'
+    },
+    {
+      id: 'community',
+      icon: '👥',
+      title: 'Community',
+      description: 'Projects focused on community development'
+    }
+  ];
+
+  const getCategoryCount = (category) => {
+    return projects.filter(project => 
+      project.category === category
+    ).length;
+  };
 
   useEffect(() => {
     const fetchProjects = async () => {
@@ -29,14 +97,20 @@ const ProjectPulse = () => {
 
     const fetchStats = async () => {
       try {
-        const response = await getDonationStats();
+        // Get stats from projects
+        const activeProjects = projects.filter(p => p.status === 'active').length;
+        const ongoingProjects = projects.filter(p => p.status === 'ongoing').length;
+        const peopleHelped = projects.reduce((sum, p) => sum + (p.peopleHelped || 0), 0);
+        const totalRaised = projects.reduce((sum, p) => sum + (p.amountRaised || 0), 0);
+
         setStats({
-          activeProjects: response.data.totalDonors,
-          completedProjects: response.data.donationsByProject.length,
-          totalRaised: response.data.totalDonations.totalAmount
+          activeProjects,
+          ongoingProjects,
+          peopleHelped,
+          totalRaised
         });
       } catch (error) {
-        console.error('Error fetching stats:', error);
+        console.error('Error calculating stats:', error);
       }
     };
 
@@ -44,52 +118,49 @@ const ProjectPulse = () => {
     fetchStats();
   }, []);
 
-  const filteredProjects = projects.filter(project => {
-    if (filters.status !== 'all' && project.status !== filters.status) return false;
-    if (filters.category !== 'all' && project.category !== filters.category) return false;
-    return true;
-  });
+  const filteredProjects = projects;
 
   return (
-    <div className="project-pulse-container">
-      <div className="container">
-        <h1>Project Pulse</h1>
+    <div className="project-pulse">
+      <div className="project-pulse-header">
+        <h1 className="project-pulse-title">Project Pulse</h1>
         <div className="project-stats">
-          <div className="stat-card">
-            <h3>People Helped</h3>
-            <p className="stat-number">1700</p>
-          </div>
-          <div className="stat-card">
-            <h3>Funds Raised</h3>
-            <p className="stat-number">KES 5,000,000</p>
-          </div>
+          {statsCards.map((card) => (
+            <div
+              key={card.id}
+              className={`stat-card ${activeCard === card.id ? 'active' : ''}`}
+              onClick={() => setActiveCard(card.id)}
+              style={{ borderColor: activeCard === card.id ? '#4caf50' : 'transparent' }}
+            >
+              <div className="stat-icon">{card.icon}</div>
+              <h3>{card.title}</h3>
+              <div className="stat-number">{card.value}</div>
+              <div className="stat-label">{card.label}</div>
+            </div>
+          ))}
         </div>
 
-        <div className="filters">
-          <select
-            className="status-filter"
-            value={filters.status}
-            onChange={(e) => setFilters({ ...filters, status: e.target.value })}
-          >
-            <option value="all">All Status</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
-            <option value="planned">Planned</option>
-          </select>
-          <select
-            className="category-filter"
-            value={filters.category}
-            onChange={(e) => setFilters({ ...filters, category: e.target.value })}
-          >
-            <option value="all">All Categories</option>
-            <option value="education">Education</option>
-            <option value="healthcare">Healthcare</option>
-            <option value="water">Water</option>
-            <option value="community">Community</option>
-          </select>
+        <div className="category-cards">
+          {categoryCards.map((card) => (
+            <div
+              key={card.id}
+              className={`category-card ${filters.category === card.id ? 'active' : ''}`}
+              onClick={() => setFilters({ ...filters, category: card.id })}
+              style={{ borderColor: filters.category === card.id ? '#2196f3' : 'transparent' }}
+            >
+              <div className="category-count">
+                <span>{getCategoryCount(card.id)}</span>
+              </div>
+              <div className="category-icon">{card.icon}</div>
+              <h3>{card.title}</h3>
+              <p>{card.description}</p>
+            </div>
+          ))}
         </div>
 
-        <div className="project-grid">
+
+
+        <div className="projects-grid">
           {filteredProjects.map((project) => (
             <ProjectCard key={project._id} {...project} />
           ))}

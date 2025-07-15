@@ -82,21 +82,21 @@ const About = () => {
           <div className="team-grid">
             <div className="team-card">
               <div className="team-image">
-                <img src="/team/ceo.jpg" alt="CEO" />
+                <img src="/images/about/team/ceo.jpg" alt="CEO" />
               </div>
               <h3>John Smith</h3>
               <p>Founder & CEO</p>
             </div>
             <div className="team-card">
               <div className="team-image">
-                <img src="/team/cfo.jpg" alt="CFO" />
+                <img src="/images/about/team/cfo.jpg" alt="CFO" />
               </div>
               <h3>Jane Doe</h3>
               <p>Chief Financial Officer</p>
             </div>
             <div className="team-card">
               <div className="team-image">
-                <img src="/team/cmo.jpg" alt="CMO" />
+                <img src="/images/about/team/cmo.jpg" alt="CMO" />
               </div>
               <h3>Mike Johnson</h3>
               <p>Chief Marketing Officer</p>
@@ -109,19 +109,19 @@ const About = () => {
           <div className="partners-grid">
             <div className="partner-card">
               <div className="partner-image">
-                <img src="/partners/partner1.png" alt="Partner 1" />
+                <img src="/images/about/partners/partner1.png" alt="Partner 1" />
               </div>
               <h3>Community Foundation</h3>
             </div>
             <div className="partner-card">
               <div className="partner-image">
-                <img src="/partners/partner2.png" alt="Partner 2" />
+                <img src="/images/about/partners/partner2.png" alt="Partner 2" />
               </div>
               <h3>Local Government</h3>
             </div>
             <div className="partner-card">
               <div className="partner-image">
-                <img src="/partners/partner3.png" alt="Partner 3" />
+                <img src="/images/about/partners/partner3.png" alt="Partner 3" />
               </div>
               <h3>NGOs</h3>
             </div>

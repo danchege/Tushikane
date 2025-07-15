@@ -4,11 +4,14 @@
   padding: 1.5rem;
   margin-bottom: 1.5rem;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
 }
 
 .project-card:hover {
   transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 }
 
 .project-image img {
@@ -17,6 +20,108 @@
   object-fit: cover;
   border-radius: 4px;
   margin-bottom: 1rem;
+  transition: transform 0.3s ease;
+}
+
+.project-card:hover .project-image img {
+  transform: scale(1.05);
+}
+
+.project-category {
+  position: absolute;
+  top: 1.5rem;
+  left: 1.5rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 15px;
+  color: white;
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-transform: capitalize;
+  z-index: 1;
+}
+
+.project-icon {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  font-size: 2rem;
+  opacity: 0.3;
+  z-index: 1;
+}
+
+.project-card h3 {
+  margin: 0 0 0.5rem 0;
+  color: var(--text-color);
+  font-size: 1.25rem;
+}
+
+.project-status {
+  font-weight: bold;
+  margin: 0 0 1rem 0;
+  font-size: 0.9rem;
+}
+
+.project-description {
+  color: #666;
+  margin: 0 0 1rem 0;
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+.project-stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  margin: 1rem 0;
+}
+
+.stat-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem;
+  background: rgba(0, 0, 0, 0.03);
+  border-radius: 6px;
+}
+
+.stat-label {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.stat-number {
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.project-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.project-actions button {
+  flex: 1;
+  padding: 0.5rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.project-actions button:hover {
+  opacity: 0.9;
+}
+
+.view-details {
+  background: #2196f3;
+  color: white;
+}
+
+.donate {
+  background: #4caf50;
+  color: white;
 }
 
 .project-card h3 {

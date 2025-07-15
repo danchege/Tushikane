@@ -3,14 +3,35 @@ const dotenv = require('dotenv');
 const cors = require('cors');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
-const connectDB = require('./config/db');
-const { errorHandler } = require('./middleware/errorHandler');
+const mongoose = require('mongoose');
 
-// Load env vars
-dotenv.config();
+// Load environment variables
+try {
+  dotenv.config();
+  console.log('✅ Environment variables loaded');
+} catch (err) {
+  console.error('❌ Error loading environment variables:', err);
+  process.exit(1);
+}
 
 // Connect to database
-connectDB();
+const connectDB = async () => {
+  try {
+    console.log('🔌 Attempting to connect to MongoDB...');
+    const db = await mongoose.connect('mongodb://localhost:27017/tushikane', {
+      useNewUrlParser: true,
+      useUnifiedTopology: true
+    });
+    console.log('✅ Connected to MongoDB');
+    console.log('🔗 Database connection:', db.connection.name);
+  } catch (err) {
+    console.error('❌ MongoDB connection error:', err);
+    process.exit(1);
+  }
+};
+
+// Connect to database
+connectDB().catch(console.error);
 
 const app = express();
 
@@ -68,6 +89,7 @@ app.get('/health', (req, res) => {
 app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/users', require('./routes/userRoutes'));
 app.use('/api/help-requests', require('./routes/helpRoutes'));
+app.use('/api/projects', require('./routes/projectsRoutes'));
 app.use('/api/test', require('./routes/test.js'));
 
 // 404 handler
@@ -79,14 +101,39 @@ app.use('*', (req, res) => {
 });
 
 // Error handler (must be last)
-app.use(errorHandler);
+// No error handler middleware needed for now
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5001;
 
 const server = app.listen(PORT, () => {
-  console.log(`🚀 Tushikane Server running on port ${PORT}`);
+  console.log(`🚀 Server started on port ${PORT}`);
   console.log(`📊 Environment: ${process.env.NODE_ENV}`);
   console.log(`🔗 API Base URL: http://localhost:${PORT}/api`);
+  console.log('✅ Server is ready to accept requests');
+});
+
+// Handle uncaught exceptions
+process.on('uncaughtException', (error) => {
+  console.error('❌ Uncaught Exception:', error);
+  console.error('❌ Stack trace:', error.stack);
+  process.exit(1);
+});
+
+// Handle unhandled promise rejections
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('❌ Unhandled Rejection:', reason);
+  console.error('❌ Promise:', promise);
+  process.exit(1);
+});
+
+// Handle SIGTERM signal (when process is terminated)
+process.on('SIGTERM', () => {
+  console.log('🛑 SIGTERM signal received');
+  console.log('🛑 Closing server...');
+  server.close(() => {
+    console.log('✅ Server closed');
+    process.exit(0);
+  });
 });
 
 // Handle unhandled promise rejections

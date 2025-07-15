@@ -1,0 +1,258 @@
+/* Project Pulse Page Styles */
+
+
+
+.project-pulse {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #2196f3 0%, #0d47a1 100%);
+  color: white;
+  padding: 2rem 0;
+}
+
+.project-pulse-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.project-pulse-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.project-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 2rem;
+  margin-bottom: 5rem;
+  padding: 0 2rem;
+}
+
+.proje.category-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 2rem;
+  padding: 0 2rem;
+  margin-top: 3rem;
+  margin-bottom: 3rem;
+}
+
+.filters {
+  display: flex;
+  gap: 2rem;
+  margin-bottom: 3rem;
+  padding: 0 2rem;
+  justify-content: center;
+}
+
+.filter-select {
+  position: relative;
+  width: 200px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 1rem;
+  padding: 0.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background: none;
+}
+
+.filter-select:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.filter-select option {
+  background: white;
+  color: black;
+  padding: 0.5rem;
+}
+
+.filter-select option:hover {
+  background: #f0f0f0;
+}
+
+.filter-select:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.3);
+}
+
+.stat-card {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 1rem;
+  padding: 2rem;
+  text-align: center;
+  transition: all 0.3s ease;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border: 2px solid transparent;
+}
+
+.stat-card:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateY(-5px);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.stat-card.active {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: #4caf50;
+  box-shadow: 0 0 20px rgba(76, 175, 80, 0.3);
+}
+
+.stat-card h3 {
+  color: white;
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+}
+
+.stat-number {
+  font-size: 3rem;
+  font-weight: bold;
+  color: white;
+  margin-bottom: 0.5rem;
+}
+
+.stat-label {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 1rem;
+}
+
+.stat-icon {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+/* Category Cards */
+.category-card {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  text-align: center;
+  transition: all 0.3s ease;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border: 2px solid transparent;
+  position: relative;
+  margin-bottom: 2rem;
+}
+
+.category-count {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 100px;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.category-count::before {
+  content: '🎯';
+  font-size: 1.2rem;
+  opacity: 0.8;
+}
+
+.category-count.active {
+  background: rgba(33, 150, 243, 0.2);
+  box-shadow: 0 2px 10px rgba(33, 150, 243, 0.3);
+}
+
+.category-card:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateY(-5px);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.category-card.active {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: #2196f3;
+  box-shadow: 0 0 20px rgba(33, 150, 243, 0.3);
+}
+
+.category-card h3 {
+  color: white;
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+}
+
+.category-card p {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 1rem;
+  margin-bottom: 1rem;
+}
+
+.category-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+/* Category-specific styles */
+.category-card.education {
+  color: #2196f3;
+}
+
+.category-card.education .category-icon {
+  content: '🎓';
+}
+
+.category-card.healthcare {
+  color: #4caf50;
+}
+
+.category-card.healthcare .category-icon {
+  content: '🏥';
+}
+
+.category-card.water {
+  color: #00bcd4;
+}
+
+.category-card.water .category-icon {
+  content: '💧';
+}
+
+.category-card.community {
+  color: #9c27b0;
+}
+
+.category-card.community .category-icon {
+  content: '👥';
+}
+
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  padding: 0 2rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .project-pulse-title {
+    font-size: 2rem;
+  }
+  
+  .stat-number {
+    font-size: 1.5rem;
+  }
+  
+  .projects-grid {
+    grid-template-columns: 1fr;
+  }
+}
