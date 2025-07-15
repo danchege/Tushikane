@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ProjectCard } from '../components';
+import ProjectCard from '../components/ProjectCard';
 import {
   getProjects,
   getDonationStats
@@ -93,13 +93,6 @@ const ProjectPulse = () => {
           {filteredProjects.map((project) => (
             <ProjectCard key={project._id} {...project} />
           ))}
-        </div>
-            <p className="stat-number">1700</p>
-          </div>
-          <div className="stat-card">
-            <h3>Funds Raised</h3>
-            <p className="stat-number">1,000,000 KES</p>
-          </div>
         </div>
       </div>
     </div>

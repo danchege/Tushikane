@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { DonationForm } from '../components';
+import { DonationForm } from '../components/DonationForm';
 import {
   getDonations,
   getDonationsByProject,

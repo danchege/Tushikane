@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { VolunteerCard } from '../components';
+import VolunteerCard from '../components/VolunteerCard';
 import {
   getVolunteers,
   applyToVolunteer
