@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { sendMessage, getMessageStats } from '../services/api';
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -7,7 +8,26 @@ const Contact = () => {
     subject: '',
     message: ''
   });
+  const [stats, setStats] = useState({
+    totalMessages: 0,
+    newMessages: 0,
+    highPriority: 0
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const response = await getMessageStats();
+        setStats(response.data);
+      } catch (error) {
+        console.error('Error fetching message stats:', error);
+      }
+    };
+
+    fetchStats();
+  }, []);
 
   const handleChange = (e) => {
     setFormData({
@@ -18,9 +38,9 @@ const Contact = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsSubmitting(true);
     try {
-      // Here you would typically make an API call to submit the form
-      console.log('Submitting contact form:', formData);
+      await sendMessage(formData);
       setSuccessMessage('Thank you for your message! We will get back to you soon.');
       setFormData({
         name: '',
@@ -30,6 +50,9 @@ const Contact = () => {
       });
     } catch (error) {
       console.error('Error submitting form:', error);
+      setSuccessMessage('Error sending message. Please try again.');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -38,6 +61,21 @@ const Contact = () => {
       <div className="container">
         <h1>Contact Us</h1>
         <p className="page-description">Get in touch with our team to learn more about our initiatives or get involved</p>
+
+        <div className="contact-stats">
+          <div className="stat-card">
+            <h3>Total Messages</h3>
+            <p>{stats.totalMessages}</p>
+          </div>
+          <div className="stat-card">
+            <h3>New Messages</h3>
+            <p>{stats.newMessages}</p>
+          </div>
+          <div className="stat-card">
+            <h3>High Priority</h3>
+            <p>{stats.highPriority}</p>
+          </div>
+        </div>
 
         <div className="contact-info">
           <div className="info-card">
@@ -69,6 +107,7 @@ const Contact = () => {
                 value={formData.name}
                 onChange={handleChange}
                 required
+                disabled={isSubmitting}
               />
             </div>
             <div className="form-group">
@@ -80,6 +119,7 @@ const Contact = () => {
                 value={formData.email}
                 onChange={handleChange}
                 required
+                disabled={isSubmitting}
               />
             </div>
             <div className="form-group">
@@ -91,6 +131,7 @@ const Contact = () => {
                 value={formData.subject}
                 onChange={handleChange}
                 required
+                disabled={isSubmitting}
               />
             </div>
             <div className="form-group">
@@ -101,10 +142,11 @@ const Contact = () => {
                 value={formData.message}
                 onChange={handleChange}
                 required
+                disabled={isSubmitting}
               ></textarea>
             </div>
-            <button type="submit" className="submit-button">
-              Send Message
+            <button type="submit" className="submit-button" disabled={isSubmitting}>
+              {isSubmitting ? 'Sending...' : 'Send Message'}
             </button>
           </form>
           {successMessage && (

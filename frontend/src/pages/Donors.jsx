@@ -1,84 +1,159 @@
-import React from 'react';
-import DonationForm from '../components/DonationForm';
-import '../components/DonationForm.css';
+import React, { useState, useEffect } from 'react';
+import { DonationForm } from '../components';
+import {
+  getDonations,
+  getDonationsByProject,
+  getDonationStats
+} from '../services/api';
 
 const Donors = () => {
-  // Sample donation projects (to be replaced with API data)
-  const donationProjects = [
-    {
-      name: 'Clean Water Initiative',
-      description: 'Provide clean water to rural communities',
-      target: '500,000 KES',
-      raised: '250,000 KES',
-      progress: 50
-    },
-    {
-      name: 'Education Support',
-      description: 'Fund education for underprivileged children',
-      target: '300,000 KES',
-      raised: '150,000 KES',
-      progress: 50
-    },
-    {
-      name: 'Healthcare Outreach',
-      description: 'Expand mobile healthcare services',
-      target: '200,000 KES',
-      raised: '100,000 KES',
-      progress: 50
+  const [projects, setProjects] = useState([]);
+  const [stats, setStats] = useState({
+    totalDonations: 0,
+    totalDonors: 0,
+    projectsFunded: 0
+  });
+  const [selectedProject, setSelectedProject] = useState(null);
+  const [donationAmount, setDonationAmount] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
+
+  useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        const response = await getDonationStats();
+        setStats({
+          totalDonations: response.data.totalDonations.totalAmount,
+          totalDonors: response.data.totalDonations.totalDonors,
+          projectsFunded: response.data.donationsByProject.length
+        });
+
+        // Get all projects with their donations
+        const projectsResponse = await getDonationsByProject();
+        setProjects(projectsResponse.data);
+      } catch (error) {
+        console.error('Error fetching projects:', error);
+      }
+    };
+
+    fetchProjects();
+  }, []);
+
+  const handleProjectSelect = (projectId) => {
+    setSelectedProject(projectId);
+  };
+
+  const handleDonate = async () => {
+    if (!selectedProject || !donationAmount) {
+      alert('Please select a project and enter an amount');
+      return;
     }
-  ];
+
+    setIsSubmitting(true);
+    try {
+      const donation = {
+        amount: parseFloat(donationAmount),
+        project: selectedProject,
+        donorName: 'Anonymous', // This would be from user session in real app
+        email: 'anonymous@example.com' // This would be from user session in real app
+      };
+
+      await createDonation(donation);
+      setSuccessMessage('Thank you for your donation!');
+      setDonationAmount('');
+      setSelectedProject(null);
+    } catch (error) {
+      console.error('Error donating:', error);
+      setSuccessMessage('Error processing donation. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <div className="donors-container">
       <div className="container">
-        <h1>Donate</h1>
-        <p className="page-description">Support our community initiatives with your generous donation</p>
+        <h1>Donors</h1>
+        <div className="donation-stats">
+          <div className="stat-card">
+            <h3>Total Donations</h3>
+            <p>KES {stats.totalDonations.toLocaleString()}</p>
+          </div>
+          <div className="stat-card">
+            <h3>Donors</h3>
+            <p>{stats.totalDonors}</p>
+          </div>
+          <div className="stat-card">
+            <h3>Projects Funded</h3>
+            <p>{stats.projectsFunded}</p>
+          </div>
+        </div>
 
         <div className="donation-projects">
-          <h2>Current Projects</h2>
-          <div className="project-progress-grid">
-            {donationProjects.map((project, index) => (
-              <div key={index} className="project-progress">
-                <h3>{project.name}</h3>
-                <p className="project-description">{project.description}</p>
-                <div className="progress-bar">
-                  <div className="progress" style={{ width: `${project.progress}%` }}></div>
-                </div>
-                <p className="progress-text">
-                  {project.raised} raised of {project.target} goal
-                </p>
+          {projects.map((project) => (
+            <div key={project._id} className="project-card">
+              <img src={project.image || '/default-project.jpg'} alt={project.name} className="project-image" />
+              <h3>{project.name}</h3>
+              <p className="project-description">{project.description}</p>
+              <div className="progress-bar">
+                <div
+                  className="progress"
+                  style={{ width: `${(project.raised / project.target) * 100}%` }}
+                ></div>
               </div>
-            ))}
-          </div>
+              <div className="progress-info">
+                <span className="raised">Raised: KES {project.raised.toLocaleString()}</span>
+                <span className="target">Target: KES {project.target.toLocaleString()}</span>
+              </div>
+              <button
+                className="donate-button"
+                onClick={() => handleProjectSelect(project._id)}
+              >
+                Donate to {project.name}
+              </button>
+            </div>
+          ))}
         </div>
 
         <div className="donation-form-section">
           <h2>Make a Donation</h2>
-          <DonationForm />
-        </div>
-
-        <div className="donation-stats">
-          <div className="stat-card">
-            <h3>Total Donations</h3>
-            <p className="stat-number">5,000,000 KES</p>
-          </div>
-          <div className="stat-card">
-            <h3>Donors</h3>
-            <p className="stat-number">200</p>
-          </div>
-          <div className="stat-card">
-            <h3>Projects Funded</h3>
-            <p className="stat-number">15</p>
-          </div>
-        </div>
-
-        <div className="donation-impact">
-          <h2>Your Donation Makes a Difference</h2>
-          <div className="impact-cards">
-            <div className="impact-card">
-              <h3>100 KES</h3>
-              <p>Provides clean water for 10 families</p>
+          <div className="donation-form">
+            <div className="form-group">
+              <label htmlFor="amount">Amount</label>
+              <input
+                type="number"
+                id="amount"
+                value={donationAmount}
+                onChange={(e) => setDonationAmount(e.target.value)}
+                placeholder="Enter donation amount"
+                disabled={!selectedProject}
+              />
             </div>
+            <button
+              onClick={handleDonate}
+              disabled={!selectedProject || !donationAmount || isSubmitting}
+            >
+              {isSubmitting ? 'Processing...' : 'Donate Now'}
+            </button>
+          </div>
+          {successMessage && (
+            <div className="success-message">{successMessage}</div>
+          )}
+        </div>
+
+        <div className="impact-section">
+          <h2>Your Impact</h2>
+          <div className="impact-cards">
+            {projects.map((project) => (
+              <div key={project._id} className="impact-card">
+                <h3>{project.name}</h3>
+                <p>{project.description}</p>
+                <div className="impact-stats">
+                  <p>Funds Raised: KES {project.raised.toLocaleString()}</p>
+                  <p>Beneficiaries: {project.beneficiaries}</p>
+                </div>
+              </div>
+            ))}
             <div className="impact-card">
               <h3>500 KES</h3>
               <p>Supports education for 5 children</p>
