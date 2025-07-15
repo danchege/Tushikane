@@ -70,4 +70,4 @@ const DonationForm = () => {
   );
 };
 
-export default DonationForm;
+export { DonationForm };
