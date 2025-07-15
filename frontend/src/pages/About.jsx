@@ -1,203 +1,132 @@
-import React, { useEffect } from 'react';
-import { motion } from 'framer-motion';
-import WOW from 'wow.js';
+import React from 'react';
+import '@/styles/About.css';
 
 const About = () => {
-  useEffect(() => {
-    new WOW().init();
-  }, []);
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        delay: 0.2,
-        staggerChildren: 0.2
-      }
-    }
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.5 }
-    }
-  };
-
   return (
     <div className="about-container">
       <div className="container">
-        <motion.section
-          initial="hidden"
-          animate="visible"
-          variants={containerVariants}
-          className="about-hero wow fadeInUp"
-        >
-          <div className="hero-content">
-            <motion.h1 variants={itemVariants}>About Tushikane</motion.h1>
-            <motion.p variants={itemVariants} className="hero-tagline">
-              Empowering Communities Through Collaboration and Action
-            </motion.p>
-          </div>
-        </motion.section>
+        <div className="hero-content">
+          <h1 className="home-title">About Tushikane</h1>
+          <p className="home-mission">
+            Empowering Communities Through Collaboration and Action
+          </p>
+        </div>
 
-        <motion.section
-          initial="hidden"
-          animate="visible"
-          variants={containerVariants}
-          className="about-mission wow fadeInUp"
-        >
-          <div className="mission-content">
-            <motion.h2 variants={itemVariants}>Our Mission</motion.h2>
-            <motion.p variants={itemVariants}>
-              Tushikane is dedicated to improving the lives of people in Bahati, Nakuru County through community-driven
-              initiatives, education, healthcare, and sustainable development programs.
-            </motion.p>
-          </div>
-        </motion.section>
+        <section>
+          <h2>Our Mission</h2>
+          <p>
+            Tushikane is dedicated to improving the lives of people in Bahati, Nakuru County through community-driven
+            initiatives, education, healthcare, and sustainable development programs.
+          </p>
+        </section>
 
-        <motion.section
-          initial="hidden"
-          animate="visible"
-          variants={containerVariants}
-          className="about-values wow fadeInUp"
-        >
-          <div className="values-content">
-            <motion.h2 variants={itemVariants}>Our Core Values</motion.h2>
-            <div className="values-grid">
-              <motion.div variants={itemVariants} className="value-card">
-                <motion.h3 variants={itemVariants}>Community First</motion.h3>
-                <motion.p variants={itemVariants}>
-                  Listening to and working with the community to identify and address their needs
-                </motion.p>
-              </motion.div>
-              <motion.div variants={itemVariants} className="value-card">
-                <motion.h3 variants={itemVariants}>Sustainability</motion.h3>
-                <motion.p variants={itemVariants}>
-                  Implementing solutions that create lasting positive change
-                </motion.p>
-              </motion.div>
-              <motion.div variants={itemVariants} className="value-card">
-                <motion.h3 variants={itemVariants}>Transparency</motion.h3>
-                <motion.p variants={itemVariants}>
-                  Clear communication and accountability in all our initiatives
-                </motion.p>
-              </motion.div>
-              <motion.div variants={itemVariants} className="value-card">
-                <motion.h3 variants={itemVariants}>Innovation</motion.h3>
-                <motion.p variants={itemVariants}>
-                  Using creative approaches to solve community challenges
-                </motion.p>
-              </motion.div>
-              <motion.div variants={itemVariants} className="value-card">
-                <motion.h3 variants={itemVariants}>Mike Johnson</motion.h3>
-                <motion.p variants={itemVariants}>Chief Marketing Officer</motion.p>
-              </motion.div>
+        <section>
+          <h2>Our Core Values</h2>
+          <div className="values-grid">
+            <div className="value-card">
+              <h3>Community First</h3>
+              <p>
+                Listening to and working with the community to identify and address their needs
+              </p>
+            </div>
+            <div className="value-card">
+              <h3>Sustainability</h3>
+              <p>
+                Implementing solutions that create lasting positive change
+              </p>
+            </div>
+            <div className="value-card">
+              <h3>Transparency</h3>
+              <p>
+                Clear communication and accountability in all our initiatives
+              </p>
+            </div>
+            <div className="value-card">
+              <h3>Innovation</h3>
+              <p>
+                Using creative approaches to solve community challenges
+              </p>
             </div>
           </div>
-        </motion.section>
+        </section>
 
-        <motion.section
-          initial="hidden"
-          animate="visible"
-          variants={containerVariants}
-          className="about-impact wow fadeInUp"
-        >
-          <div className="impact-content">
-            <motion.h2 variants={itemVariants}>Our Impact</motion.h2>
-            <div className="impact-grid">
-              <motion.div variants={itemVariants} className="impact-card">
-                <div className="impact-icon">
-                  <i className="fas fa-users"></i>
-                </div>
-                <motion.h3 variants={itemVariants}>1,500+</motion.h3>
-                <motion.p variants={itemVariants}>People Helped</motion.p>
-              </motion.div>
-              <motion.div variants={itemVariants} className="impact-card">
-                <div className="impact-icon">
-                  <i className="fas fa-building"></i>
-                </div>
-                <motion.h3 variants={itemVariants}>25+</motion.h3>
-                <motion.p variants={itemVariants}>Projects Completed</motion.p>
-              </motion.div>
-              <motion.div variants={itemVariants} className="impact-card">
-                <div className="impact-icon">
-                  <i className="fas fa-smile"></i>
-                </div>
-                <motion.h3 variants={itemVariants}>100%</motion.h3>
-                <motion.p variants={itemVariants}>Community Satisfaction</motion.p>
-              </motion.div>
+        <section>
+          <h2>Our Impact</h2>
+          <div className="impact-grid">
+            <div className="impact-card">
+              <div className="impact-icon">
+                <i className="fas fa-users"></i>
+              </div>
+              <h3>1,500+</h3>
+              <p>People Helped</p>
+            </div>
+            <div className="impact-card">
+              <div className="impact-icon">
+                <i className="fas fa-building"></i>
+              </div>
+              <h3>25+</h3>
+              <p>Projects Completed</p>
+            </div>
+            <div className="impact-card">
+              <div className="impact-icon">
+                <i className="fas fa-smile"></i>
+              </div>
+              <h3>100%</h3>
+              <p>Community Satisfaction</p>
             </div>
           </div>
-        </motion.section>
+        </section>
 
-        <motion.section
-          initial="hidden"
-          animate="visible"
-          variants={containerVariants}
-          className="about-team wow fadeInUp"
-        >
-          <div className="team-content">
-            <motion.h2 variants={itemVariants}>Our Team</motion.h2>
-            <div className="team-grid">
-              <motion.div variants={itemVariants} className="team-card">
-                <div className="team-image">
-                  <motion.img variants={itemVariants} src="/team/ceo.jpg" alt="CEO" />
-                </div>
-                <motion.h3 variants={itemVariants}>John Smith</motion.h3>
-                <motion.p variants={itemVariants}>Founder & CEO</motion.p>
-              </motion.div>
-              <motion.div variants={itemVariants} className="team-card">
-                <div className="team-image">
-                  <motion.img variants={itemVariants} src="/team/cfo.jpg" alt="CFO" />
-                </div>
-                <motion.h3 variants={itemVariants}>Jane Doe</motion.h3>
-                <motion.p variants={itemVariants}>Chief Financial Officer</motion.p>
-              </motion.div>
-              <motion.div variants={itemVariants} className="team-card">
-                <div className="team-image">
-                  <motion.img variants={itemVariants} src="/team/cmo.jpg" alt="CMO" />
-                </div>
-                <motion.h3 variants={itemVariants}>Mike Johnson</motion.h3>
-                <motion.p variants={itemVariants}>Chief Marketing Officer</motion.p>
-              </motion.div>
+        <section>
+          <h2>Our Team</h2>
+          <div className="team-grid">
+            <div className="team-card">
+              <div className="team-image">
+                <img src="/team/ceo.jpg" alt="CEO" />
+              </div>
+              <h3>John Smith</h3>
+              <p>Founder & CEO</p>
+            </div>
+            <div className="team-card">
+              <div className="team-image">
+                <img src="/team/cfo.jpg" alt="CFO" />
+              </div>
+              <h3>Jane Doe</h3>
+              <p>Chief Financial Officer</p>
+            </div>
+            <div className="team-card">
+              <div className="team-image">
+                <img src="/team/cmo.jpg" alt="CMO" />
+              </div>
+              <h3>Mike Johnson</h3>
+              <p>Chief Marketing Officer</p>
             </div>
           </div>
-        </motion.section>
+        </section>
 
-        <motion.section
-          initial="hidden"
-          animate="visible"
-          variants={containerVariants}
-          className="about-partners wow fadeInUp"
-        >
-          <div className="partners-content">
-            <motion.h2 variants={itemVariants}>Our Partners</motion.h2>
-            <div className="partners-grid">
-              <motion.div variants={itemVariants} className="partner-card">
-                <div className="partner-image">
-                  <motion.img variants={itemVariants} src="/partners/partner1.png" alt="Partner 1" />
-                </div>
-                <motion.h3 variants={itemVariants}>Community Foundation</motion.h3>
-              </motion.div>
-              <motion.div variants={itemVariants} className="partner-card">
-                <div className="partner-image">
-                  <motion.img variants={itemVariants} src="/partners/partner2.png" alt="Partner 2" />
-                </div>
-                <motion.h3 variants={itemVariants}>Local Government</motion.h3>
-              </motion.div>
-              <motion.div variants={itemVariants} className="partner-card">
-                <div className="partner-image">
-                  <motion.img variants={itemVariants} src="/partners/partner3.png" alt="Partner 3" />
-                </div>
-                <motion.h3 variants={itemVariants}>NGOs</motion.h3>
-              </motion.div>
+        <section>
+          <h2>Our Partners</h2>
+          <div className="partners-grid">
+            <div className="partner-card">
+              <div className="partner-image">
+                <img src="/partners/partner1.png" alt="Partner 1" />
+              </div>
+              <h3>Community Foundation</h3>
+            </div>
+            <div className="partner-card">
+              <div className="partner-image">
+                <img src="/partners/partner2.png" alt="Partner 2" />
+              </div>
+              <h3>Local Government</h3>
+            </div>
+            <div className="partner-card">
+              <div className="partner-image">
+                <img src="/partners/partner3.png" alt="Partner 3" />
+              </div>
+              <h3>NGOs</h3>
             </div>
           </div>
-        </motion.section>
+        </section>
       </div>
     </div>
   );

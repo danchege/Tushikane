@@ -1,0 +1,192 @@
+/* About page styles */
+.about-container {
+  min-height: 100vh;
+  padding: 2rem;
+  background: linear-gradient(135deg, #64b5f6 0%, #1e88e5 100%);
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+section {
+  padding: 4rem 0;
+  background: white;
+  border-radius: 8px;
+  margin-bottom: 2rem;
+  box-shadow: 0 2px 4px rgba(33, 150, 243, 0.1);
+}
+
+section h2 {
+  font-size: 2rem;
+  color: #2196f3;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+section p {
+  color: #333;
+  line-height: 1.6;
+}
+
+.hero-content {
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.home-title {
+  font-size: 3rem;
+  color: white;
+  margin-bottom: 1rem;
+}
+
+.home-mission {
+  font-size: 1.5rem;
+  color: white;
+  margin-bottom: 2rem;
+}
+
+/* Card Grid Layout */
+.values-grid,
+.impact-grid,
+.team-grid,
+.partners-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  padding: 2rem 0;
+}
+
+/* Card Styles */
+.value-card,
+.impact-card,
+.team-card,
+.partner-card {
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(33, 150, 243, 0.15);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  text-align: center;
+}
+
+.value-card:hover,
+.impact-card:hover,
+.team-card:hover,
+.partner-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(33, 150, 243, 0.2);
+}
+
+.value-card h3,
+.impact-card h3 {
+  font-size: 1.5rem;
+  color: #2196f3;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.value-card p,
+.impact-card p {
+  color: #333;
+  line-height: 1.6;
+}
+
+/* Impact Card Styles */
+.impact-icon {
+  width: 60px;
+  height: 60px;
+  background: #2196f3;
+  border-radius: 50%;
+  margin: 0 auto 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.impact-icon i {
+  font-size: 1.5rem;
+  color: white;
+}
+
+/* Team Card Styles */
+.team-image {
+  width: 100%;
+  height: 200px;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+}
+
+.team-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.team-card h3 {
+  font-size: 1.25rem;
+  color: #2196f3;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.team-card p {
+  color: #666;
+  margin: 0;
+}
+
+/* Partner Card Styles */
+.partner-image {
+  width: 100%;
+  height: 150px;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 1rem;
+}
+
+.partner-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.partner-card h3 {
+  font-size: 1.1rem;
+  color: #2196f3;
+  margin: 0;
+  font-weight: 600;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  section {
+    padding: 2rem 0;
+  }
+  
+  .values-grid,
+  .impact-grid,
+  .team-grid,
+  .partners-grid {
+    grid-template-columns: 1fr;
+    padding: 1rem 0;
+  }
+  
+  .value-card,
+  .impact-card,
+  .team-card,
+  .partner-card {
+    padding: 1.5rem;
+  }
+  
+  .home-title {
+    font-size: 2.5rem;
+  }
+  
+  .home-mission {
+    font-size: 1.25rem;
+  }
+}
