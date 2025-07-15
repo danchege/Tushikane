@@ -2,7 +2,45 @@
 
 > **Msaada kwa Jamii** - Connecting communities through humanitarian service
 
-A full-stack MERN application that enables volunteers and requesters to connect and provide/request help in their communities.
+A modern, full-stack web application that connects volunteers, donors, and community members to support humanitarian initiatives and community projects.
+
+## 📱 Features
+
+### 📊 Project Pulse
+- Real-time project statistics and analytics
+- Category-based project filtering
+- Status tracking for active projects
+- Community impact metrics
+
+### 👥 Volunteers
+- Volunteer registration and management
+- Project volunteer matching
+- Volunteer application tracking
+- Success stories and testimonials
+
+### 💰 Donors
+- Project-based donation system
+- Donation progress tracking
+- Impact reporting
+- Donation history management
+
+### 📞 Chat Hub
+- Real-time community chat
+- Direct messaging between volunteers and coordinators
+- Group chat for project discussions
+- File sharing and emoji support
+
+### 📋 Admin Dashboard
+- User management
+- Project administration
+- Message monitoring
+- Statistics and analytics
+
+### 📧 Contact
+- Community contact information
+- Message submission system
+- Office hours and location
+- Success message feedback
 
 ## 📁 Project Structure
 
@@ -16,25 +54,61 @@ Tushikane/
 │   ├── routes/            # API routes
 │   ├── utils/             # Utility functions
 │   ├── server.js          # Main server file
-│   ├── package.json       # Backend dependencies
-│   └── README.md          # Backend documentation
+│   └── package.json       # Backend dependencies
 │
-└── frontend/              # React.js Frontend (Coming Soon)
+└── frontend/              # React.js Frontend
     ├── public/
     ├── src/
+    │   ├── components/     # Reusable React components
+    │   ├── pages/          # Page components
+    │   ├── styles/         # Global styles
+    │   ├── services/       # API services
+    │   └── assets/         # Images and media
     ├── package.json
     └── README.md
+```
+
+## 📸 Screenshots
+
+```
+Tushikane/
+└── screenshots/
+    ├── home/              # Homepage screenshots
+    ├── projectpulse/      # Project Pulse screenshots
+    ├── volunteers/        # Volunteers page screenshots
+    ├── donors/           # Donors page screenshots
+    ├── chathub/          # Chat Hub screenshots
+    ├── admin/            # Admin Dashboard screenshots
+    └── contact/          # Contact page screenshots
 ```
 
 ## 🚀 Quick Start
 
 ### Prerequisites
-- Node.js (v14 or higher)
-- MongoDB (local or Atlas)
-- npm or yarn
+- Node.js (v18 or higher)
+- MongoDB (v6.0 or higher)
+- npm or pnpm (recommended)
 
-### Backend Setup
+### Installation
 
+1. Clone the repository:
+```bash
+git clone https://github.com/yourusername/tushikane.git
+```
+
+2. Install backend dependencies:
+```bash
+cd tushikane/backend
+pnpm install
+```
+
+3. Install frontend dependencies:
+```bash
+cd ../frontend
+pnpm install
+```
+
+4. Start the backend server:
 ```bash
 # Navigate to backend directory
 cd backend
@@ -53,22 +127,22 @@ cp env.example .env
 npm run dev
 ```
 
-The backend API will be available at `http://localhost:5000`
+The backend API will be available at `http://localhost:5001`
 
-### Frontend Setup (Coming Soon)
+### Frontend Setup
 
 ```bash
 # Navigate to frontend directory
 cd frontend
 
 # Install dependencies
-npm install
+pnpm install
 
 # Start development server
-npm start
+pnpm dev
 ```
 
-The frontend will be available at `http://localhost:3000`
+The frontend will be available at `http://localhost:3002`
 
 ## 🔗 API Endpoints
 
@@ -197,6 +271,10 @@ The frontend will be available at `http://localhost:3000`
 ## 📝 License
 
 This project is licensed under the MIT License.
+
+## 👤 Maker
+
+**Daniel Chege Njenga** - Creator and Developer
 
 ## 🙏 Acknowledgments
 
