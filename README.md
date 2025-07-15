@@ -20,19 +20,7 @@ A modern, full-stack web application that connects volunteers, donors, and commu
 - Volunteer application tracking
 - Success stories and testimonials
 
-### 👥 Volunteers
-- Volunteer registration and management
-- Project volunteer matching
-- Volunteer application tracking
-- Success stories and testimonials
-
 ![Volunteers](./screenshots/volunteers/volunteers.png)
-
-### 💰 Donors
-- Project-based donation system
-- Donation progress tracking
-- Impact reporting
-- Donation history management
 
 ### 💰 Donors
 - Project-based donation system
@@ -48,12 +36,6 @@ A modern, full-stack web application that connects volunteers, donors, and commu
 - Group chat for project discussions
 - File sharing and emoji support
 
-### 📞 Chat Hub
-- Real-time community chat
-- Direct messaging between volunteers and coordinators
-- Group chat for project discussions
-- File sharing and emoji support
-
 ![Chat Hub](./screenshots/chathub/chathub.png)
 
 ### 📋 Admin Dashboard
@@ -62,19 +44,7 @@ A modern, full-stack web application that connects volunteers, donors, and commu
 - Message monitoring
 - Statistics and analytics
 
-### 📋 Admin Dashboard
-- User management
-- Project administration
-- Message monitoring
-- Statistics and analytics
-
 ![Admin Dashboard](./screenshots/admin/admin.png)
-
-### 📧 Contact
-- Community contact information
-- Message submission system
-- Office hours and location
-- Success message feedback
 
 ### 📧 Contact
 - Community contact information
