@@ -32,6 +32,8 @@
     "frontend"
   ],
   "dependencies": {
-    "react-router-dom": "^7.6.3"
+    "framer-motion": "^12.23.6",
+    "react-router-dom": "^7.6.3",
+    "wow.js": "^1.2.2"
   }
 }
