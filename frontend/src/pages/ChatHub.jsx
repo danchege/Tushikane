@@ -7,6 +7,22 @@ const ChatHub = () => {
   const [newMessage, setNewMessage] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+
+  const handleCopy = (text) => {
+    navigator.clipboard.writeText(text);
+  };
+
+  const handleReply = (text) => {
+    setNewMessage(`> ${text}\n\n${newMessage}`);
+  };
+
+  const handleEmoji = () => {
+    setShowEmojiPicker(!showEmojiPicker);
+  };
+
+  const handleFile = () => {
+    // TODO: Implement file upload
+  };
   const [activeChat, setActiveChat] = useState(null);
   const [chats, setChats] = useState([]);
 
@@ -46,22 +62,6 @@ const ChatHub = () => {
   const handleTyping = (e) => {
     setNewMessage(e.target.value);
     setIsTyping(true);
-  };
-
-  const handleCopy = (text) => {
-    navigator.clipboard.writeText(text);
-  };
-
-  const handleReply = (text) => {
-    setNewMessage(`> ${text}\n\n${newMessage}`);
-  };
-
-  const handleEmoji = () => {
-    setShowEmojiPicker(!showEmojiPicker);
-  };
-
-  const handleFile = () => {
-    // TODO: Implement file upload
   };
 
   return (
