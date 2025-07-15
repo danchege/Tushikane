@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import VolunteerCard from '../components/VolunteerCard';
+import '@/styles/Volunteers.css';
 import {
   getVolunteers,
   applyToVolunteer
@@ -94,6 +95,9 @@ const Volunteers = () => {
           <h2>Join Our Team</h2>
           <p>Be part of our mission to make a difference in the community.</p>
           <div className="application-form">
+            {successMessage && (
+              <div className="success-message">{successMessage}</div>
+            )}
             <form onSubmit={handleApply}>
               <div className="form-group">
                 <label htmlFor="name">Name</label>

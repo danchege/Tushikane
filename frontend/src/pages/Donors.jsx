@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { DonationForm } from '../components/DonationForm';
+import '@/styles/Donors.css';
 import {
   getDonations,
   getDonationsByProject,
@@ -129,16 +130,13 @@ const Donors = () => {
                 disabled={!selectedProject}
               />
             </div>
-            <button
-              onClick={handleDonate}
-              disabled={!selectedProject || !donationAmount || isSubmitting}
-            >
+            <div className="donate-button" onClick={handleDonate} disabled={isSubmitting}>
               {isSubmitting ? 'Processing...' : 'Donate Now'}
-            </button>
+            </div>
+            {successMessage && (
+              <div className="success-message">{successMessage}</div>
+            )}
           </div>
-          {successMessage && (
-            <div className="success-message">{successMessage}</div>
-          )}
         </div>
 
         <div className="impact-section">

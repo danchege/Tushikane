@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { sendMessage, getMessageStats } from '../services/api';
+import '@/styles/Contact.css';
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -8,26 +9,8 @@ const Contact = () => {
     subject: '',
     message: ''
   });
-  const [stats, setStats] = useState({
-    totalMessages: 0,
-    newMessages: 0,
-    highPriority: 0
-  });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
-
-  useEffect(() => {
-    const fetchStats = async () => {
-      try {
-        const response = await getMessageStats();
-        setStats(response.data);
-      } catch (error) {
-        console.error('Error fetching message stats:', error);
-      }
-    };
-
-    fetchStats();
-  }, []);
 
   const handleChange = (e) => {
     setFormData({
@@ -62,20 +45,6 @@ const Contact = () => {
         <h1>Contact Us</h1>
         <p className="page-description">Get in touch with our team to learn more about our initiatives or get involved</p>
 
-        <div className="contact-stats">
-          <div className="stat-card">
-            <h3>Total Messages</h3>
-            <p>{stats.totalMessages}</p>
-          </div>
-          <div className="stat-card">
-            <h3>New Messages</h3>
-            <p>{stats.newMessages}</p>
-          </div>
-          <div className="stat-card">
-            <h3>High Priority</h3>
-            <p>{stats.highPriority}</p>
-          </div>
-        </div>
 
         <div className="contact-info">
           <div className="info-card">
@@ -97,6 +66,9 @@ const Contact = () => {
 
         <div className="contact-form-section">
           <h2>Send us a Message</h2>
+          {successMessage && (
+            <div className="success-message">{successMessage}</div>
+          )}
           <form onSubmit={handleSubmit} className="contact-form">
             <div className="form-group">
               <label htmlFor="name">Name</label>
