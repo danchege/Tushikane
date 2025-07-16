@@ -21,7 +21,7 @@ A modern, full-stack web application that connects volunteers, donors, and commu
 - Impact statistics
 - Community testimonials
 
-![About](./screenshots/about/about page.png)
+![About](./screenshots/about/about.png)
 
 ### 📊 Project Pulse
 - Real-time project statistics and analytics
@@ -29,7 +29,7 @@ A modern, full-stack web application that connects volunteers, donors, and commu
 - Status tracking for active projects
 - Community impact metrics
 
-![Project Pulse](./screenshots/projectpulse/project pulse.png)
+![Project Pulse](./screenshots/projectpulse/projectpulse.png)
 
 ### 👥 Volunteers
 - Volunteer registration and management
