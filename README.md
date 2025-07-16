@@ -6,6 +6,14 @@ A modern, full-stack web application that connects volunteers, donors, and commu
 
 ## 📱 Features
 
+### 🏠 Home
+- Landing page with key features
+- Quick access to main sections
+- Community highlights
+- Latest updates and announcements
+
+![Home](./screenshots/home/home page.png)
+
 ### 🌐 About
 - Organization history and mission
 - Team information
