@@ -73,4 +73,8 @@ export const updateMessage = (id, message) => api.put(`/contact/${id}`, message)
 export const deleteMessage = (id) => api.delete(`/contact/${id}`);
 export const getMessageStats = () => api.get('/contact/stats');
 
+// Project Pulse API
+export const getProjectStats = () => api.get('/stats/project');
+export const updateProjectStats = (stats) => api.put('/stats/project', stats);
+
 export default api;

@@ -4,6 +4,8 @@ const cors = require('cors');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const mongoose = require('mongoose');
+const http = require('http');
+const { Server } = require('socket.io');
 
 // Load environment variables
 try {
@@ -34,6 +36,15 @@ const connectDB = async () => {
 connectDB().catch(console.error);
 
 const app = express();
+const server = http.createServer(app);
+const io = new Server(server, {
+  cors: {
+    origin: process.env.NODE_ENV === 'production' 
+      ? ['https://your-frontend-domain.com'] 
+      : ['http://localhost:3000'],
+    methods: ['GET', 'POST']
+  }
+});
 
 // Security middleware
 app.use(helmet());
@@ -90,6 +101,7 @@ app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/users', require('./routes/userRoutes'));
 app.use('/api/help-requests', require('./routes/helpRoutes'));
 app.use('/api/projects', require('./routes/projectsRoutes'));
+app.use('/api/stats', require('./routes/stats'));
 app.use('/api/test', require('./routes/test.js'));
 
 // 404 handler
@@ -105,7 +117,45 @@ app.use('*', (req, res) => {
 
 const PORT = process.env.PORT || 5001;
 
-const server = app.listen(PORT, () => {
+// WebSocket connection handling
+io.on('connection', (socket) => {
+  console.log('Client connected');
+
+  // Chat functionality
+  socket.on('joinChat', (username) => {
+    socket.username = username;
+    socket.broadcast.emit('userJoined', username);
+  });
+
+  socket.on('sendMessage', async (message) => {
+    try {
+      // Save message to database
+      const newMessage = new Message({
+        user: socket.username,
+        content: message
+      });
+      await newMessage.save();
+
+      // Broadcast message to all clients
+      io.emit('newMessage', {
+        user: socket.username,
+        content: message,
+        timestamp: new Date()
+      });
+    } catch (error) {
+      console.error('Error saving message:', error);
+    }
+  });
+
+  socket.on('disconnect', () => {
+    if (socket.username) {
+      io.emit('userLeft', socket.username);
+    }
+    console.log('Client disconnected');
+  });
+});
+
+server.listen(PORT, () => {
   console.log(`🚀 Server started on port ${PORT}`);
   console.log(`📊 Environment: ${process.env.NODE_ENV}`);
   console.log(`🔗 API Base URL: http://localhost:${PORT}/api`);

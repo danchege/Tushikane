@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { getMessages, sendMessage } from '../services/api';
 import '@/styles/ChatHub.css';
+import { socket } from '../services/WebSocketService';
 
 const ChatHub = () => {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
-  const [isTyping, setIsTyping] = useState(false);
-  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const [username, setUsername] = useState('');
+  const [users, setUsers] = useState([]);
+  const [isConnected, setIsConnected] = useState(false);
+  const [connectionError, setConnectionError] = useState('');
 
   const handleCopy = (text) => {
     navigator.clipboard.writeText(text);
@@ -27,10 +29,50 @@ const ChatHub = () => {
   const [chats, setChats] = useState([]);
 
   useEffect(() => {
-    fetchChats();
-    const interval = setInterval(fetchChats, 30000); // Refresh every 30 seconds
-    return () => clearInterval(interval);
-  }, []);
+    // Handle connection status
+    socket.on('connect', () => {
+      setIsConnected(true);
+      setConnectionError('');
+      if (username) {
+        socket.emit('joinChat', username);
+      }
+    });
+
+    socket.on('disconnect', () => {
+      setIsConnected(false);
+      setConnectionError('Connection lost. Attempting to reconnect...');
+    });
+
+    socket.on('connect_error', (error) => {
+      setConnectionError('Failed to connect. Please check if the server is running.');
+      console.error('Connection error:', error);
+    });
+
+    // Listen for new messages
+    socket.on('newMessage', (message) => {
+      setMessages(prev => [...prev, message]);
+    });
+
+    // Listen for user joins
+    socket.on('userJoined', (user) => {
+      setUsers(prev => [...prev, user]);
+    });
+
+    // Listen for user leaves
+    socket.on('userLeft', (user) => {
+      setUsers(prev => prev.filter(u => u !== user));
+    });
+
+    return () => {
+      // Clean up socket listeners
+      socket.off('newMessage');
+      socket.off('userJoined');
+      socket.off('userLeft');
+      socket.off('connect');
+      socket.off('disconnect');
+      socket.off('connect_error');
+    };
+  }, [username]);
 
   const fetchChats = async () => {
     try {
@@ -42,21 +84,12 @@ const ChatHub = () => {
     }
   };
 
-  const handleSendMessage = async (e) => {
+  const handleSendMessage = (e) => {
     e.preventDefault();
-    if (!newMessage.trim() || !activeChat) return;
+    if (!newMessage.trim()) return;
 
-    try {
-      await sendMessage({
-        chatId: activeChat,
-        content: newMessage,
-        sender: 'user'
-      });
-      setNewMessage('');
-      fetchChats();
-    } catch (error) {
-      console.error('Error sending message:', error);
-    }
+    socket.emit('sendMessage', newMessage);
+    setNewMessage('');
   };
 
   const handleTyping = (e) => {
@@ -66,104 +99,65 @@ const ChatHub = () => {
 
   return (
     <div className="chat-hub-container">
-      <div className="chat-sidebar">
-        <div className="chat-header">
-          <h2>Chat Hub</h2>
-          <p>Community Communication Center</p>
+      {!isConnected && (
+        <div className="connection-error">
+          <h3>{connectionError}</h3>
+          <button onClick={() => socket.connect()}>
+            Try to Connect
+          </button>
         </div>
-        <div className="chat-list">
-          {chats.map((chat) => (
-            <div
-              key={chat.id}
-              className={`chat-item ${activeChat === chat.id ? 'active' : ''}`}
-              onClick={() => setActiveChat(chat.id)}
-            >
-              <div className="chat-avatar">
-                {chat.name[0]}
-              </div>
-              <div className="chat-info">
-                <h3>{chat.name}</h3>
-                <p>{chat.lastMessage}</p>
-              </div>
-              {chat.unread > 0 && (
-                <div className="unread-badge">{chat.unread}</div>
-              )}
+      )}
+      {isConnected && (
+        <>
+          <div className="chat-sidebar">
+            <div className="chat-header">
+              <h2>Chat Hub</h2>
+              <p>Real-time Community Chat</p>
             </div>
-          ))}
-        </div>
-      </div>
-
-      <div className="chat-main">
-        <div className="chat-header">
-          <h2>Current Chat</h2>
-          <div className="chat-actions">
-            <button className="action-button" onClick={() => setActiveChat(null)}>
-              <span>🔍</span> New Chat
-            </button>
-            <button className="action-button">
-              <span>💾</span> Save Chat
-            </button>
-          </div>
-        </div>
-
-        <div className="chat-messages">
-          {messages.map((message, index) => (
-            <div
-              key={index}
-              className={`message ${message.sender === 'user' ? 'user' : 'other'}`}
-            >
-              <div className="message-bubble">
-                <div className="message-content">
-                  {message.content}
+            <div className="user-list">
+              <h3>Active Users</h3>
+              {users.map((user) => (
+                <div key={user} className="user-item">
+                  <span>{user}</span>
                 </div>
-                <div className="message-meta">
-                  <span className="timestamp">{message.timestamp}</span>
-                  <div className="message-actions">
-                    <button className="action-icon" onClick={() => handleCopy(message.content)}>
-                      📋
-                    </button>
-                    <button className="action-icon" onClick={() => handleReply(message.content)}>
-                      🔍
-                    </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="chat-main">
+            <div className="message-list">
+              {messages.map((message, index) => (
+                <div
+                  key={index}
+                  className={`message ${message.user === username ? 'user' : ''}`}
+                >
+                  <div className="message-bubble">
+                    <p>{message.content}</p>
+                    <div className="message-meta">
+                      <span>{new Date(message.timestamp).toLocaleTimeString()}</span>
+                    </div>
                   </div>
                 </div>
-              </div>
+              ))}
             </div>
-          ))}
-          {isTyping && (
-            <div className="typing-indicator">
-              <div className="dot"></div>
-              <div className="dot"></div>
-              <div className="dot"></div>
-            </div>
-          )}
-        </div>
-
-        <div className="chat-input">
-          <form onSubmit={handleSendMessage}>
-            <div className="input-container">
-              <input
-                type="text"
-                value={newMessage}
-                onChange={handleTyping}
-                placeholder="Type your message..."
-                disabled={!activeChat}
-              />
-              <div className="input-actions">
-                <button type="button" className="action-icon" onClick={handleEmoji}>
-                  😊
+            <div className="message-actions">
+              <form onSubmit={handleSendMessage}>
+                <input
+                  type="text"
+                  value={newMessage}
+                  onChange={(e) => setNewMessage(e.target.value)}
+                  placeholder="Type a message..."
+                  className="message-input"
+                  disabled={!isConnected}
+                />
+                <button type="submit" className="send-button" disabled={!isConnected}>
+                  {isConnected ? 'Send' : 'Connecting...'}
                 </button>
-                <button type="button" className="action-icon" onClick={handleFile}>
-                  📎
-                </button>
-              </div>
+              </form>
             </div>
-            <button type="submit" disabled={!newMessage.trim() || !activeChat}>
-              Send
-            </button>
-          </form>
-        </div>
-      </div>
+          </div>
+        </>
+      )}
     </div>
   );
 };

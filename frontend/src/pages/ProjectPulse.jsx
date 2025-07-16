@@ -4,8 +4,10 @@ import '@/styles/ProjectPulse.css';
 import '@/components/ProjectCard.css';
 import {
   getProjects,
-  getDonationStats
+  getDonationStats,
+  getProjectStats
 } from '../services/api';
+import { socket, listenForStatsUpdates } from '../services/WebSocketService';
 
 const ProjectPulse = () => {
   const [projects, setProjects] = useState([]);
@@ -90,6 +92,7 @@ const ProjectPulse = () => {
       try {
         const response = await getProjects();
         setProjects(response.data);
+        fetchStats(); // Fetch stats after projects are loaded
       } catch (error) {
         console.error('Error fetching projects:', error);
       }
@@ -97,25 +100,33 @@ const ProjectPulse = () => {
 
     const fetchStats = async () => {
       try {
-        // Get stats from projects
-        const activeProjects = projects.filter(p => p.status === 'active').length;
-        const ongoingProjects = projects.filter(p => p.status === 'ongoing').length;
-        const peopleHelped = projects.reduce((sum, p) => sum + (p.peopleHelped || 0), 0);
-        const totalRaised = projects.reduce((sum, p) => sum + (p.amountRaised || 0), 0);
-
+        const response = await getProjectStats();
         setStats({
-          activeProjects,
-          ongoingProjects,
-          peopleHelped,
-          totalRaised
+          activeProjects: response.data.activeProjects,
+          ongoingProjects: response.data.ongoingProjects,
+          peopleHelped: response.data.peopleHelped,
+          totalRaised: response.data.moneyRaised
         });
       } catch (error) {
-        console.error('Error calculating stats:', error);
+        console.error('Error fetching stats:', error);
       }
     };
 
+    const handleStatsUpdate = (updatedStats) => {
+      fetchStats(); // Fetch fresh stats when update is received
+    };
+
+    listenForStatsUpdates(handleStatsUpdate);
+
     fetchProjects();
-    fetchStats();
+
+    // Set up interval to refresh stats every minute
+    const interval = setInterval(fetchStats, 60000);
+
+    return () => {
+      clearInterval(interval);
+      socket.off('statsUpdated'); // Cleanup socket listener
+    };
   }, []);
 
   const filteredProjects = projects;
