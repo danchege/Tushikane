@@ -19,8 +19,9 @@ try {
 // Connect to database
 const connectDB = async () => {
   try {
-    console.log('🔌 Attempting to connect to MongoDB...');
-    const db = await mongoose.connect('mongodb://localhost:27017/tushikane', {
+    const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/tushikane';
+    console.log('🔌 Attempting to connect to MongoDB at:', MONGODB_URI);
+    const db = await mongoose.connect(MONGODB_URI, {
       useNewUrlParser: true,
       useUnifiedTopology: true
     });
