@@ -6,13 +6,22 @@ A modern, full-stack web application that connects volunteers, donors, and commu
 
 ## 📱 Features
 
+### 🌐 About
+- Organization history and mission
+- Team information
+- Success stories
+- Impact statistics
+- Community testimonials
+
+![About](./screenshots/about/about page.png)
+
 ### 📊 Project Pulse
 - Real-time project statistics and analytics
 - Category-based project filtering
 - Status tracking for active projects
 - Community impact metrics
 
-![Project Pulse](./screenshots/projectpulse/projectpulse.png)
+![Project Pulse](./screenshots/projectpulse/project pulse.png)
 
 ### 👥 Volunteers
 - Volunteer registration and management
@@ -52,7 +61,7 @@ A modern, full-stack web application that connects volunteers, donors, and commu
 - Office hours and location
 - Success message feedback
 
-![Contact](./screenshots/contact/contact.png)
+![Contact](./screenshots/contact/contacts.png)
 
 ## 📁 Project Structure
 
