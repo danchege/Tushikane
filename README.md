@@ -12,7 +12,7 @@ A modern, full-stack web application that connects volunteers, donors, and commu
 - Community highlights
 - Latest updates and announcements
 
-![Home](./screenshots/home/home page.png)
+![Home](./screenshots/home/home.png)
 
 ### 🌐 About
 - Organization history and mission
