@@ -253,32 +253,19 @@ try {
     });
 
     socket.on('disconnect', () => {
-      if (socket.username) {
-        io.emit('userLeft', socket.username);
-      }
       console.log('Client disconnected');
+      if (socket.username) {
+        socket.broadcast.emit('userLeft', socket.username);
+      }
     });
   });
 
-  console.log('🔧 Starting server on port:', PORT);
-  console.log('🔧 Environment:', process.env.NODE_ENV);
-  console.log('🔧 MongoDB URI:', process.env.MONGODB_URI);
-  console.log('🔧 Starting HTTP server...');
-  try {
-    server.listen(PORT, () => {
-      console.log(`🚀 Server started on port ${PORT}`);
-      console.log(`📊 Environment: ${process.env.NODE_ENV}`);
-      console.log(`🔗 API Base URL: http://localhost:${PORT}/api`);
-      console.log('✅ Server is ready to accept requests');
-    });
-  } catch (error) {
-    console.error('❌ Error starting server:', error);
-    console.error('❌ Stack trace:', error.stack);
-    process.exit(1);
-  }
+  // Start the server (move this here for Option 1)
+  server.listen(PORT, () => {
+    console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`);
+  });
 
 } catch (error) {
-  console.error('❌ Error creating Express app:', error);
-  console.error('❌ Stack trace:', error.stack);
+  console.error('Server startup error:', error);
   process.exit(1);
 } 
