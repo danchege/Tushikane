@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const Project = require('../models/Project');
+const Project = require('../models/ProjectModel');
 const Donation = require('../models/Donation');
 
 // Get project pulse statistics

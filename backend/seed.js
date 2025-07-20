@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const Project = require('./models/Project');
+const Project = require('./models/ProjectModel');
 const Volunteer = require('./models/Volunteer');
 const Donation = require('./models/Donation');
 const ContactMessage = require('./models/ContactMessage');

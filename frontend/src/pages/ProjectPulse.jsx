@@ -14,8 +14,13 @@ const ProjectPulse = () => {
   const [stats, setStats] = useState({
     activeProjects: 0,
     ongoingProjects: 0,
-    peopleHelped: 0,
-    totalRaised: 0
+    completedProjects: 0,
+    educationProjects: 0,
+    healthcareProjects: 0,
+    waterProjects: 0,
+    communityProjects: 0,
+    totalPeopleHelped: 0,
+    totalMoneyRaised: 0
   });
   const [filters, setFilters] = useState({
     status: 'all',

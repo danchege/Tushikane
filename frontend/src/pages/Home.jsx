@@ -6,7 +6,7 @@ const Home = () => {
     <div className="home-container">
       <section className="hero-section">
         <div className="hero-content">
-          <div className="logo-placeholder">Logo/Image</div>
+          <img src="/images/logo/tushikane_logo.png" alt="Tushikane Logo" className="logo-image" />
           <h1 className="home-title">Welcome to Tushikane</h1>
           <p className="home-mission">
             Empowering the Bahati, Nakuru County community through collaboration, compassion, and action.

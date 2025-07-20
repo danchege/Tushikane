@@ -19,14 +19,17 @@ const Admin = () => {
   const [volunteers, setVolunteers] = useState([]);
   const [donors, setDonors] = useState([]);
   // Project pulse statistics
-  const [activeProjects, setActiveProjects] = useState(0);
-  const [ongoingProjects, setOngoingProjects] = useState(0);
-  const [peopleHelped, setPeopleHelped] = useState(0);
-  const [moneyRaised, setMoneyRaised] = useState(0);
-  const [educationProjects, setEducationProjects] = useState(0);
-  const [healthcareProjects, setHealthcareProjects] = useState(0);
-  const [waterProjects, setWaterProjects] = useState(0);
-  const [communityProjects, setCommunityProjects] = useState(0);
+  const [stats, setStats] = useState({
+    activeProjects: 0,
+    ongoingProjects: 0,
+    completedProjects: 0,
+    educationProjects: 0,
+    healthcareProjects: 0,
+    waterProjects: 0,
+    communityProjects: 0,
+    totalPeopleHelped: 0,
+    totalMoneyRaised: 0
+  });
   
   // Project form state
   const [projectName, setProjectName] = useState('');
@@ -45,44 +48,86 @@ const Admin = () => {
 
   useEffect(() => {
     fetchData();
+    
+    // Listen for statistics updates
+    socket.on('statsUpdated', (updatedStats) => {
+      setStats(updatedStats);
+    });
+
+    return () => {
+      socket.off('statsUpdated');
+    };
   }, [activeTab]);
 
   const fetchData = async () => {
     try {
-      if (activeTab === 'projects') {
-        const response = await getProjects();
-        setProjects(response.data);
-      } else if (activeTab === 'volunteers') {
-        const response = await getVolunteers();
-        setVolunteers(response.data);
-      } else if (activeTab === 'donors') {
-        const response = await getDonors();
-        setDonors(response.data);
-      }
+      const [projectsRes, volunteersRes, donorsRes] = await Promise.all([
+        getProjects(),
+        getVolunteers(),
+        getDonors()
+      ]);
+      setProjects(projectsRes.data);
+      setVolunteers(volunteersRes.data);
+      setDonors(donorsRes.data);
+
+      // Calculate initial statistics
+      const stats = projectsRes.data.reduce((acc, project) => {
+        if (project.status === 'planned') acc.activeProjects++;
+        if (project.status === 'ongoing') acc.ongoingProjects++;
+        if (project.status === 'completed') acc.completedProjects++;
+        
+        switch (project.category) {
+          case 'education':
+            acc.educationProjects++;
+            break;
+          case 'healthcare':
+            acc.healthcareProjects++;
+            break;
+          case 'water':
+            acc.waterProjects++;
+            break;
+          case 'community':
+            acc.communityProjects++;
+            break;
+        }
+        
+        acc.totalPeopleHelped += project.stats?.peopleHelped || 0;
+        acc.totalMoneyRaised += project.stats?.moneyRaised || 0;
+        
+        return acc;
+      }, {
+        activeProjects: 0,
+        ongoingProjects: 0,
+        completedProjects: 0,
+        educationProjects: 0,
+        healthcareProjects: 0,
+        waterProjects: 0,
+        communityProjects: 0,
+        totalPeopleHelped: 0,
+        totalMoneyRaised: 0
+      });
+
+      setStats(stats);
     } catch (error) {
       console.error('Error fetching data:', error);
     }
   };
 
-  const handleSubmitProject = async (e) => {
+  const handleProjectSubmit = async (e) => {
     e.preventDefault();
     try {
       await createProject({
         name: projectName,
         description: projectDescription,
-        targetAmount: projectTarget
+        target: projectTarget,
+        category: 'education', // Default category
+        stats: {
+          peopleHelped: 0,
+          moneyRaised: 0
+        }
       });
-      setProjects([...projects, {
-        name: projectName,
-        description: projectDescription,
-        targetAmount: projectTarget
-      }]);
-      
-      // Show success message
-      setSuccessMessage(`Successfully added project: ${projectName}`);
+      setSuccessMessage('Project created successfully!');
       setShowSuccess(true);
-      
-      // Reset form
       setProjectName('');
       setProjectDescription('');
       setProjectTarget(0);
@@ -141,14 +186,7 @@ const Admin = () => {
       });
       // Refresh the stats
       const response = await getProjectStats();
-      setActiveProjects(response.data.activeProjects);
-      setOngoingProjects(response.data.ongoingProjects);
-      setPeopleHelped(response.data.peopleHelped);
-      setMoneyRaised(response.data.moneyRaised);
-      setEducationProjects(response.data.educationProjects);
-      setHealthcareProjects(response.data.healthcareProjects);
-      setWaterProjects(response.data.waterProjects);
-      setCommunityProjects(response.data.communityProjects);
+      setStats(response.data);
     } catch (error) {
       console.error('Error updating stat:', error);
     }
@@ -194,7 +232,7 @@ const Admin = () => {
         {activeTab === 'projects' && (
           <div>
             <h2>Add New Project</h2>
-            <form onSubmit={handleSubmitProject} className="admin-form">
+            <form onSubmit={handleProjectSubmit} className="admin-form">
               <div className="form-group">
                 <label>Project Name</label>
                 <input 
@@ -221,18 +259,22 @@ const Admin = () => {
                   required
                 />
               </div>
-              <button type="submit" className="submit-button">Add Project</button>
+              <button type="submit" onClick={handleProjectSubmit} className="submit-button">Add Project</button>
             </form>
 
             <h2>Current Projects</h2>
             <div className="projects-list">
-              {projects.map((project) => (
-                <div key={project._id} className="project-card">
-                  <h3>{project.name}</h3>
-                  <p>{project.description}</p>
-                  <p>Target: ${project.targetAmount}</p>
-                </div>
-              ))}
+              {Array.isArray(projects) ? (
+                projects.map((project) => (
+                  <div key={project._id} className="project-card">
+                    <h3>{project.name}</h3>
+                    <p>{project.description}</p>
+                    <p>Target: ${project.targetAmount}</p>
+                  </div>
+                ))
+              ) : (
+                <p>No projects available</p>
+              )}
             </div>
           </div>
         )}
@@ -309,12 +351,12 @@ const Admin = () => {
                 <div className="stat-number-container">
                   <input 
                     type="number" 
-                    value={activeProjects}
-                    onChange={(e) => setActiveProjects(e.target.value)}
+                    value={stats.activeProjects}
+                    onChange={(e) => setStats(prev => ({ ...prev, activeProjects: e.target.value }))}
                     className="stat-number-input"
                   />
                   <button 
-                    onClick={() => updateStat('activeProjects', activeProjects)}
+                    onClick={() => updateStat('activeProjects', stats.activeProjects)}
                     className="update-button"
                   >
                     Update
@@ -329,12 +371,12 @@ const Admin = () => {
                 <div className="stat-number-container">
                   <input 
                     type="number" 
-                    value={ongoingProjects}
-                    onChange={(e) => setOngoingProjects(e.target.value)}
+                    value={stats.ongoingProjects}
+                    onChange={(e) => setStats(prev => ({ ...prev, ongoingProjects: e.target.value }))}
                     className="stat-number-input"
                   />
                   <button 
-                    onClick={() => updateStat('ongoingProjects', ongoingProjects)}
+                    onClick={() => updateStat('ongoingProjects', stats.ongoingProjects)}
                     className="update-button"
                   >
                     Update
@@ -349,12 +391,12 @@ const Admin = () => {
                 <div className="stat-number-container">
                   <input 
                     type="number" 
-                    value={peopleHelped}
-                    onChange={(e) => setPeopleHelped(e.target.value)}
+                    value={stats.totalPeopleHelped}
+                    onChange={(e) => setStats(prev => ({ ...prev, totalPeopleHelped: e.target.value }))}
                     className="stat-number-input"
                   />
                   <button 
-                    onClick={() => updateStat('peopleHelped', peopleHelped)}
+                    onClick={() => updateStat('totalPeopleHelped', stats.totalPeopleHelped)}
                     className="update-button"
                   >
                     Update
@@ -369,12 +411,12 @@ const Admin = () => {
                 <div className="stat-number-container">
                   <input 
                     type="number" 
-                    value={moneyRaised}
-                    onChange={(e) => setMoneyRaised(e.target.value)}
+                    value={stats.totalMoneyRaised}
+                    onChange={(e) => setStats(prev => ({ ...prev, totalMoneyRaised: e.target.value }))}
                     className="stat-number-input"
                   />
                   <button 
-                    onClick={() => updateStat('moneyRaised', moneyRaised)}
+                    onClick={() => updateStat('totalMoneyRaised', stats.totalMoneyRaised)}
                     className="update-button"
                   >
                     Update
@@ -391,12 +433,12 @@ const Admin = () => {
                 <div className="category-number-container">
                   <input 
                     type="number" 
-                    value={educationProjects}
-                    onChange={(e) => setEducationProjects(e.target.value)}
+                    value={stats.educationProjects}
+                    onChange={(e) => setStats(prev => ({ ...prev, educationProjects: e.target.value }))}
                     className="category-number-input"
                   />
                   <button 
-                    onClick={() => updateStat('educationProjects', educationProjects)}
+                    onClick={() => updateStat('educationProjects', stats.educationProjects)}
                     className="update-button"
                   >
                     Update
@@ -411,12 +453,12 @@ const Admin = () => {
                 <div className="category-number-container">
                   <input 
                     type="number" 
-                    value={healthcareProjects}
-                    onChange={(e) => setHealthcareProjects(e.target.value)}
+                    value={stats.healthcareProjects}
+                    onChange={(e) => setStats(prev => ({ ...prev, healthcareProjects: e.target.value }))}
                     className="category-number-input"
                   />
                   <button 
-                    onClick={() => updateStat('healthcareProjects', healthcareProjects)}
+                    onClick={() => updateStat('healthcareProjects', stats.healthcareProjects)}
                     className="update-button"
                   >
                     Update
@@ -431,12 +473,12 @@ const Admin = () => {
                 <div className="category-number-container">
                   <input 
                     type="number" 
-                    value={waterProjects}
-                    onChange={(e) => setWaterProjects(e.target.value)}
+                    value={stats.waterProjects}
+                    onChange={(e) => setStats(prev => ({ ...prev, waterProjects: e.target.value }))}
                     className="category-number-input"
                   />
                   <button 
-                    onClick={() => updateStat('waterProjects', waterProjects)}
+                    onClick={() => updateStat('waterProjects', stats.waterProjects)}
                     className="update-button"
                   >
                     Update
@@ -451,12 +493,12 @@ const Admin = () => {
                 <div className="category-number-container">
                   <input 
                     type="number" 
-                    value={communityProjects}
-                    onChange={(e) => setCommunityProjects(e.target.value)}
+                    value={stats.communityProjects}
+                    onChange={(e) => setStats(prev => ({ ...prev, communityProjects: e.target.value }))}
                     className="category-number-input"
                   />
                   <button 
-                    onClick={() => updateStat('communityProjects', communityProjects)}
+                    onClick={() => updateStat('communityProjects', stats.communityProjects)}
                     className="update-button"
                   >
                     Update

@@ -13,6 +13,19 @@
   z-index: 100;
 }
 
+.navbar-logo {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-logo img {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: contain;
+  box-shadow: 0 0 15px rgba(33, 150, 243, 0.3);
+}
+
 .navbar-logo .logo-placeholder {
   font-family: 'Montserrat', Arial, sans-serif;
   font-size: 1.5rem;

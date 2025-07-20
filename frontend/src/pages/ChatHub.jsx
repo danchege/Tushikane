@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import '@/styles/ChatHub.css';
-import { socket } from '../services/WebSocketService';
+import { socket, getMessages } from '../services/api';
 
 const ChatHub = () => {
   const [messages, setMessages] = useState([]);

@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Donation = require('../models/Donation');
-const Project = require('../models/Project');
+const Project = require('../models/ProjectModel');
 const auth = require('../middleware/auth');
 
 // Get all donations
