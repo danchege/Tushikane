@@ -20,43 +20,31 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Checkout code
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # 2. Set up Node.js
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: ${{ env.NODE_VERSION }}
 
-      # 3. Set up pnpm
       - name: Set up pnpm
         uses: pnpm/action-setup@v2
         with:
           version: 8
 
-      # 4. Install dependencies (only for frontend)
       - name: Install dependencies
         working-directory: ./frontend
         run: pnpm install
 
-      # 5. Lint (if you have a lint script)
-      # - name: Run Linter
-      #   working-directory: ./frontend
-      #   run: pnpm run lint --if-present
-
-      # 6. Run tests (if you have a test script)
       - name: Run Tests
         working-directory: ./frontend
-        run: pnpm test --if-present
+        run: pnpm test
 
-      # 7. Build the frontend
       - name: Build Frontend
         working-directory: ./frontend
         run: pnpm run build
 
-      # 8. Upload build artifacts for preview or deployment
       - name: Upload production-ready build files
         uses: actions/upload-artifact@v4
         with:
@@ -77,4 +65,3 @@ jobs:
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
           working-directory: ./frontend
-          prod: ${{ github.ref == 'refs/heads/main' }}
