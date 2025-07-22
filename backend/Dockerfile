@@ -2,9 +2,12 @@ FROM node:18-slim
 
 WORKDIR /app
 
+# Install pnpm
+RUN npm install -g pnpm
+
 # Install dependencies
 COPY package*.json ./
-RUN npm install
+RUN pnpm install --frozen-lockfile
 
 # Copy source code
 COPY . .
@@ -13,4 +16,4 @@ COPY . .
 EXPOSE 5000
 
 # Start the application
-CMD ["npm", "start"]
+CMD ["pnpm", "start"]
