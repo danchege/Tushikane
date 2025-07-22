@@ -58,6 +58,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+      - name: Debug Secrets
+        run: echo "ORG_ID=${{ secrets.VERCEL_ORG_ID }} PROJECT_ID=${{ secrets.VERCEL_PROJECT_ID }}"
       - name: Deploy to Vercel
         uses: amondnet/vercel-action@v20
         with:
