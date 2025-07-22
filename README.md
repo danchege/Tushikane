@@ -6,7 +6,7 @@ A modern, full-stack web application that connects volunteers, donors, and commu
 
 ## 🚀 Live Demo
 
-- **Frontend (Vercel):** [Link to your Vercel deployment]
+- **Frontend (Vercel):** https://tushikane-frontend.vercel.app
 - **Backend (Render):** https://tushikane-1.onrender.com/
 
 ## 📱 Features
