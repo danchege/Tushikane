@@ -4,6 +4,11 @@
 
 A modern, full-stack web application that connects volunteers, donors, and community members to support humanitarian initiatives and community projects.
 
+## 🚀 Live Demo
+
+- **Frontend (Vercel):** [Link to your Vercel deployment]
+- **Backend (Render):** https://tushikane-1.onrender.com/
+
 ## 📱 Features
 
 ### 🏠 Home
@@ -115,63 +120,40 @@ Tushikane/
 
 ### Prerequisites
 - Node.js (v18 or higher)
-- MongoDB (v6.0 or higher)
-- npm or pnpm (recommended)
+- pnpm (recommended for monorepo support)
+- MongoDB (local instance or from a provider like MongoDB Atlas)
 
-### Installation
+### Installation & Setup
 
-1. Clone the repository:
-```bash
-git clone https://github.com/yourusername/tushikane.git
-```
+1.  **Clone the repository:**
+    ```bash
+    git clone https://github.com/danchege/Tushikane.git
+    cd Tushikane
+    ```
 
-2. Install backend dependencies:
-```bash
-cd tushikane/backend
-pnpm install
-```
+2.  **Install all dependencies:**
+    Run this command from the root directory to install dependencies for both the frontend and backend.
+    ```bash
+    pnpm install
+    ```
 
-3. Install frontend dependencies:
-```bash
-cd ../frontend
-pnpm install
-```
+3.  **Configure Backend Environment:**
+    - Navigate to the `backend` directory.
+    - Create a `.env` file by copying the example: `cp .env.example .env` (if you have one) or create it manually.
+    - Add your environment variables:
+      ```env
+      MONGODB_URI=your_mongodb_connection_string
+      JWT_SECRET=your_super_secret_jwt_key
+      PORT=5000
+      ```
 
-4. Start the backend server:
-```bash
-# Navigate to backend directory
-cd backend
-
-# Install dependencies
-npm install
-
-# Create environment file
-cp env.example .env
-
-# Edit .env with your configuration
-# MONGODB_URI=mongodb://localhost:27017/tushikane_db
-# JWT_SECRET=your-super-secret-jwt-key
-
-# Start development server
-npm run dev
-```
-
-The backend API will be available at `http://localhost:5001`
-
-### Frontend Setup
-
-```bash
-# Navigate to frontend directory
-cd frontend
-
-# Install dependencies
-pnpm install
-
-# Start development server
-pnpm dev
-```
-
-The frontend will be available at `http://localhost:3002`
+4.  **Start Both Frontend and Backend:**
+    From the root directory, run:
+    ```bash
+    pnpm run dev
+    ```
+    - The backend API will be available at `http://localhost:5000`
+    - The frontend will be available at `http://localhost:5173` (or as specified by Vite).
 
 ## 🔗 API Endpoints
 
@@ -193,24 +175,13 @@ The frontend will be available at `http://localhost:3002`
 - `GET /api/users/volunteers` - Get volunteers
 - `GET /api/users/:id` - Get user profile
 
-## 🎯 Features
-
-### Backend Features
-- ✅ JWT Authentication & Authorization
-- ✅ Role-based access control (Volunteer/Requester)
-- ✅ Help request management with filtering
-- ✅ Volunteer system with offer/accept workflow
-- ✅ MongoDB with Mongoose ODM
-- ✅ Input validation and error handling
-- ✅ Rate limiting and security headers
-- ✅ Comprehensive API documentation
-
-### Frontend Features (Coming Soon)
+### Frontend Features
 - 🔄 User authentication and registration
 - 🔄 Help request creation and management
 - 🔄 Volunteer discovery and connection
-- 🔄 Real-time notifications
+- 🔄 Real-time chat hub with Socket.IO
 - 🔄 Responsive design for mobile/desktop
+- 🔄 Project and donor tracking
 
 ## 🛠️ Technology Stack
 
@@ -218,14 +189,15 @@ The frontend will be available at `http://localhost:3002`
 - **Runtime**: Node.js
 - **Framework**: Express.js
 - **Database**: MongoDB with Mongoose
-- **Authentication**: JWT with bcrypt
+- **Authentication**: JWT with `bcryptjs`
+- **Real-time**: Socket.IO
 - **Security**: Helmet, CORS, Rate Limiting
-- **Validation**: Express-validator
+- **Validation**: express-validator
 
-### Frontend (Planned)
-- **Framework**: React.js
-- **State Management**: Redux Toolkit
-- **UI Library**: Material-UI or Tailwind CSS
+### Frontend
+- **Framework**: React.js with Vite
+- **State Management**: React Context / Hooks (can be extended with Redux)
+- **UI & Animations**: Framer Motion, CSS
 - **HTTP Client**: Axios
 - **Routing**: React Router
 
@@ -279,15 +251,17 @@ The frontend will be available at `http://localhost:3002`
 
 ## 🚀 Deployment
 
-### Backend Deployment
-- **Platform**: Heroku, DigitalOcean, AWS
-- **Database**: MongoDB Atlas
-- **Environment**: Set production variables
+This project is configured for continuous deployment using GitHub Actions.
 
-### Frontend Deployment
-- **Platform**: Vercel, Netlify, GitHub Pages
-- **Build**: Optimized production build
-- **Environment**: Configure API endpoints
+### Backend (Render)
+- The backend is automatically deployed to **Render** from the `backend/` directory.
+- The CI/CD pipeline in `.github/workflows/backend.yaml` handles testing, building a Docker image, and deploying.
+- A live instance is running on Render, connected to a MongoDB Atlas database.
+
+### Frontend (Vercel)
+- The frontend is automatically deployed to **Vercel** from the `frontend/` directory.
+- The CI/CD pipeline in `.github/workflows/frontend.yaml` handles testing, building, and deploying to Vercel.
+- The production build is optimized by Vite.
 
 ## 🤝 Contributing
 
