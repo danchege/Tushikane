@@ -39,7 +39,7 @@ jobs:
       # 4. Install dependencies (only for frontend)
       - name: Install dependencies
         working-directory: ./frontend
-        run: pnpm install --frozen-lockfile
+        run: pnpm install
 
       # 5. Lint (if you have a lint script)
       - name: Run Linter
