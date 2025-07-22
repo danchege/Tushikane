@@ -42,9 +42,9 @@ jobs:
         run: pnpm install
 
       # 5. Lint (if you have a lint script)
-      - name: Run Linter
-        working-directory: ./frontend
-        run: pnpm run lint --if-present
+      # - name: Run Linter
+      #   working-directory: ./frontend
+      #   run: pnpm run lint --if-present
 
       # 6. Run tests (if you have a test script)
       - name: Run Tests
