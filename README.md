@@ -116,6 +116,14 @@ Tushikane/
     └── contact/          # Contact page screenshots
 ```
 
+## 🖼️ Render Backend Logs Screenshot
+
+Add a screenshot here showing successful backend logs from Render to prove the backend ran:
+
+```
+![Render Backend Logs](./screenshots/backend/render-logs.png)
+```
+
 ## 🚀 Quick Start
 
 ### Prerequisites
