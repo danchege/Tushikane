@@ -13,9 +13,8 @@ env:
   NODE_VERSION: '18.x'
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}/tushikane-backend
-  DOCKER_BUILDKIT: 1  # Enable Docker BuildKit for faster builds
+  DOCKER_BUILDKIT: 1
 
-# Define job dependencies using needs
 jobs:
   test:
     name: Run Tests
@@ -33,7 +32,7 @@ jobs:
     - name: Set up pnpm
       uses: pnpm/action-setup@v2
       with:
-        version: 8  # or your preferred pnpm version
+        version: 8
 
     - name: Install dependencies
       working-directory: ./backend
@@ -52,7 +51,7 @@ jobs:
 
   build-and-push:
     name: Build and Push Docker Image
-    needs: test  # Only run if tests pass
+    needs: test
     runs-on: ubuntu-latest
     
     steps:
@@ -92,7 +91,7 @@ jobs:
 
   deploy:
     name: Deploy to Render
-    needs: [test, build-and-push]  # Only deploy if both test and build pass
+    needs: [test, build-and-push]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     
@@ -103,9 +102,3 @@ jobs:
         api-key: ${{ secrets.RENDER_API_KEY }}
         service-id: ${{ secrets.RENDER_SERVICE_ID }}
         image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
-        # Environment variables will be set in Render dashboard
-        # Uncomment and modify the following if you want to set them here
-        # env-vars: |
-        #   MONGODB_URI=${{ secrets.MONGODB_URI }}
-        #   NODE_ENV=production
-        #   PORT=10000
