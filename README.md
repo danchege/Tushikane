@@ -80,26 +80,64 @@ A modern, full-stack web application that connects volunteers, donors, and commu
 
 ```
 Tushikane/
-├── backend/                 # Express.js API Server
-│   ├── config/             # Database configuration
-│   ├── controllers/        # Route controllers
-│   ├── middleware/         # Custom middleware
-│   ├── models/            # MongoDB schemas
-│   ├── routes/            # API routes
-│   ├── utils/             # Utility functions
-│   ├── server.js          # Main server file
-│   └── package.json       # Backend dependencies
+├── backend/
+│   ├── config/
+│   ├── controllers/
+│   ├── db/
+│   ├── middleware/
+│   ├── models/
+│   ├── routes/
+│   ├── utils/
+│   ├── Dockerfile
+│   ├── package.json
+│   ├── pnpm-lock.yaml
+│   ├── seed.js
+│   ├── server.js
+│   ├── test-mongo.js
+│   ├── testDatabase.js
+│   ├── testMongo.js
 │
-└── frontend/              # React.js Frontend
-    ├── public/
-    ├── src/
-    │   ├── components/     # Reusable React components
-    │   ├── pages/          # Page components
-    │   ├── styles/         # Global styles
-    │   ├── services/       # API services
-    │   └── assets/         # Images and media
-    ├── package.json
-    └── README.md
+├── frontend/
+│   ├── public/
+│   │   └── images/
+│   │       └── logo/
+│   │           └── tushikane_logo.png
+│   ├── src/
+│   │   ├── components/
+│   │   ├── pages/
+│   │   ├── services/
+│   │   ├── styles/
+│   │   ├── App.jsx
+│   │   ├── App.js
+│   │   ├── App.css
+│   │   └── main.jsx
+│   ├── jest.config.js
+│   ├── babel.config.js
+│   ├── setupTests.js
+│   ├── vite.config.mjs
+│   ├── Dockerfile
+│   ├── index.html
+│   ├── package.json
+│   └── pnpm-lock.yaml
+│
+├── .github/
+│   └── workflows/
+│       ├── backend.yaml
+│       └── frontend.yaml
+├── screenshots/
+│   ├── about/
+│   ├── admin/
+│   ├── contact/
+│   ├── donors/
+│   ├── home/
+│   ├── projectpulse/
+│   └── volunteers/
+├── docker-compose.yml
+├── package.json
+├── package-lock.json
+├── pnpm-lock.yaml
+├── README.md
+└── vercel.json
 ```
 
 ## 📸 Screenshots
