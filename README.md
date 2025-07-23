@@ -334,3 +334,29 @@ This project is licensed under the MIT License.
 ---
 
 **Tushikane** - Making a difference, one request at a time. 🌍❤️ 
+
+## ⚙️ CI/CD Operations
+
+This project uses **GitHub Actions** for continuous integration and deployment:
+
+### Frontend (Vercel)
+- Workflow: `.github/workflows/frontend.yaml`
+- On every push or pull request to `main` (affecting `frontend/**`):
+  1. Installs dependencies and runs tests for the frontend.
+  2. Builds the frontend with Vite.
+  3. Deploys the production build to Vercel using the Vercel CLI and project secrets.
+- Secrets required: `VERCEL_TOKEN`, `VERCEL_PROJECT_ID`, `VERCEL_ORG_ID`
+- Vercel Root Directory: `frontend`
+
+### Backend (Render)
+- Workflow: `.github/workflows/backend.yaml`
+- On every push or pull request to `main` (affecting `backend/**`):
+  1. Installs dependencies and runs tests for the backend.
+  2. Builds and pushes a Docker image to GitHub Container Registry.
+  3. Deploys the backend to Render using the Render API and project secrets.
+- Secrets required: `RENDER_API_KEY`, `RENDER_SERVICE_ID`
+
+### General
+- All workflows run on Ubuntu runners.
+- All dependencies are managed with `pnpm` for fast, reliable installs.
+- Build/test failures or missing secrets will prevent deployment. 
