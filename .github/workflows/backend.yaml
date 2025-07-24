@@ -34,6 +34,9 @@ jobs:
       with:
         version: 8
 
+    - name: List backend directory contents
+      run: ls -l ./backend
+
     - name: Install dependencies
       working-directory: ./backend
       run: pnpm install --frozen-lockfile
