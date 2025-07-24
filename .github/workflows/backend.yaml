@@ -12,7 +12,7 @@ on:
 env:
   NODE_VERSION: '18.x'
   REGISTRY: ghcr.io
-  IMAGE_NAME: tushikane-backend
+  IMAGE_NAME: danchege/tushikane/tushikane-backend
   DOCKER_BUILDKIT: 1
 
 jobs:
