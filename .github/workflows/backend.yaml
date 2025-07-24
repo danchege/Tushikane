@@ -12,7 +12,7 @@ on:
 env:
   NODE_VERSION: '18.x'
   REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}/tushikane-backend
+  IMAGE_NAME: tushikane-backend
   DOCKER_BUILDKIT: 1
 
 jobs:
@@ -47,7 +47,7 @@ jobs:
       run: pnpm test
       env:
         NODE_ENV: test
-        MONGODB_URI: ${{ secrets.TEST_MONGODB_URI || 'mongodb://localhost:27017/test' }}
+        MONGODB_URI: ${{ secrets.TEST_MONGODB_URI }}
 
   build-and-push:
     name: Build and Push Docker Image

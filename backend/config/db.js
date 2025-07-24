@@ -2,8 +2,7 @@ const mongoose = require('mongoose');
 
 const connectDB = async () => {
   try {
-    const MONGODB_URI = process.env.MONGODB_URI || 
-      'mongodb+srv://danchege:Prolificdan!1@cluster0.ox5qy3t.mongodb.net/tushikane?retryWrites=true&w=majority';
+    const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/tushikane';
 
     const conn = await mongoose.connect(MONGODB_URI, {
       useNewUrlParser: true,
