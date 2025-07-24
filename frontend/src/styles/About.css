@@ -160,10 +160,12 @@ section p {
 
 .partner-image {
   width: 100%;
-  height: 180px;
+  aspect-ratio: 1/1;
+  height: auto;
   border-radius: 8px 8px 0 0;
   overflow: hidden;
   margin-bottom: 0;
+  background: radial-gradient(circle, #64b5f6 60%, #1e88e5 100%);
 }
 
 .partner-image img {
