@@ -146,6 +146,45 @@ This project uses **GitHub Actions** for continuous integration and deployment:
 - **HTTP Client**: Axios
 - **Routing**: React Router
 
+## 🚀 Quick Start
+
+### Prerequisites
+- Node.js (v18 or higher)
+- pnpm (recommended for monorepo support)
+- MongoDB (local instance or from a provider like MongoDB Atlas)
+
+### Installation & Setup
+
+1.  **Clone the repository:**
+    ```bash
+    git clone https://github.com/danchege/Tushikane.git
+    cd Tushikane
+    ```
+
+2.  **Install all dependencies:**
+    Run this command from the root directory to install dependencies for both the frontend and backend.
+    ```bash
+    pnpm install
+    ```
+
+3.  **Configure Backend Environment:**
+    - Navigate to the `backend` directory.
+    - Create a `.env` file by copying the example: `cp .env.example .env` (if you have one) or create it manually.
+    - Add your environment variables:
+      ```env
+      MONGODB_URI=your_mongodb_connection_string
+      JWT_SECRET=your_super_secret_jwt_key
+      PORT=5000
+      ```
+
+4.  **Start Both Frontend and Backend:**
+    From the root directory, run:
+    ```bash
+    pnpm run dev
+    ```
+    - The backend API will be available at `http://localhost:5000`
+    - The frontend will be available at `http://localhost:3002` (or as specified by Vite).
+
 ## 📸 Screenshots
 
 ```
@@ -224,45 +263,6 @@ Tushikane/
 - Success message feedback
 
 ![Contact](./screenshots/contact/contacts.png)
-
-## 🚀 Quick Start
-
-### Prerequisites
-- Node.js (v18 or higher)
-- pnpm (recommended for monorepo support)
-- MongoDB (local instance or from a provider like MongoDB Atlas)
-
-### Installation & Setup
-
-1.  **Clone the repository:**
-    ```bash
-    git clone https://github.com/danchege/Tushikane.git
-    cd Tushikane
-    ```
-
-2.  **Install all dependencies:**
-    Run this command from the root directory to install dependencies for both the frontend and backend.
-    ```bash
-    pnpm install
-    ```
-
-3.  **Configure Backend Environment:**
-    - Navigate to the `backend` directory.
-    - Create a `.env` file by copying the example: `cp .env.example .env` (if you have one) or create it manually.
-    - Add your environment variables:
-      ```env
-      MONGODB_URI=your_mongodb_connection_string
-      JWT_SECRET=your_super_secret_jwt_key
-      PORT=5000
-      ```
-
-4.  **Start Both Frontend and Backend:**
-    From the root directory, run:
-    ```bash
-    pnpm run dev
-    ```
-    - The backend API will be available at `http://localhost:5000`
-    - The frontend will be available at `http://localhost:3002` (or as specified by Vite).
 
 ## 🔐 User Roles
 
