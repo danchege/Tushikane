@@ -9,7 +9,149 @@ A modern, full-stack web application that connects volunteers, donors, and commu
 - **Frontend (Vercel):** http://tushikane.vercel.app/
 - **Backend (Render):** https://tushikane-1.onrender.com/
 
-## 📱 Features
+## 📁 Project Structure
+
+```
+Tushikane/
+├── backend/
+│   ├── config/
+│   ├── controllers/
+│   ├── db/
+│   ├── middleware/
+│   ├── models/
+│   ├── routes/
+│   ├── utils/
+│   ├── Dockerfile
+│   ├── package.json
+│   ├── pnpm-lock.yaml
+│   ├── seed.js
+│   ├── server.js
+│   ├── test-mongo.js
+│   ├── testDatabase.js
+│   ├── testMongo.js
+│
+├── frontend/
+│   ├── public/
+│   │   └── images/
+│   │       └── logo/
+│   │           └── tushikane_logo.png
+│   ├── src/
+│   │   ├── components/
+│   │   ├── pages/
+│   │   ├── services/
+│   │   ├── styles/
+│   │   ├── App.jsx
+│   │   ├── App.js
+│   │   ├── App.css
+│   │   └── main.jsx
+│   ├── jest.config.js
+│   ├── babel.config.js
+│   ├── setupTests.js
+│   ├── vite.config.mjs
+│   ├── Dockerfile
+│   ├── index.html
+│   ├── package.json
+│   └── pnpm-lock.yaml
+│
+├── .github/
+│   └── workflows/
+│       ├── backend.yaml
+│       └── frontend.yaml
+├── screenshots/
+│   ├── about/
+│   ├── admin/
+│   ├── contact/
+│   ├── donors/
+│   ├── home/
+│   ├── projectpulse/
+│   └── volunteers/
+├── docker-compose.yml
+├── package.json
+├── package-lock.json
+├── pnpm-lock.yaml
+├── README.md
+└── vercel.json
+```
+
+## 🚀 Deployment
+
+This project is configured for continuous deployment using GitHub Actions.
+
+### Backend (Render)
+- The backend is automatically deployed to **Render** from the `backend/` directory.
+- The CI/CD pipeline in `.github/workflows/backend.yaml` handles testing, building a Docker image, and deploying.
+- A live instance is running on Render, connected to a MongoDB Atlas database.
+
+### Frontend (Vercel)
+- The frontend is automatically deployed to **Vercel** from the `frontend/` directory.
+- The CI/CD pipeline in `.github/workflows/frontend.yaml` handles testing, building, and deploying to Vercel.
+- The production build is optimized by Vite.
+
+## ⚙️ CI/CD Operations
+
+This project uses **GitHub Actions** for continuous integration and deployment:
+
+### Frontend (Vercel)
+- Workflow: `.github/workflows/frontend.yaml`
+- On every push or pull request to `main` (affecting `frontend/**`):
+  1. Installs dependencies and runs tests for the frontend.
+  2. Builds the frontend with Vite.
+  3. Deploys the production build to Vercel using the Vercel CLI and project secrets.
+- Secrets required: `VERCEL_TOKEN`, `VERCEL_PROJECT_ID`, `VERCEL_ORG_ID`
+- Vercel Root Directory: `frontend`
+
+### Backend (Render)
+- Workflow: `.github/workflows/backend.yaml`
+- On every push or pull request to `main` (affecting `backend/**`):
+  1. Installs dependencies and runs tests for the backend.
+  2. Builds and pushes a Docker image to GitHub Container Registry.
+  3. Deploys the backend to Render using the Render API and project secrets.
+- Secrets required: `RENDER_API_KEY`, `RENDER_SERVICE_ID`
+
+### General
+- All workflows run on Ubuntu runners.
+- All dependencies are managed with `pnpm` for fast, reliable installs.
+- Build/test failures or missing secrets will prevent deployment. 
+
+## 🖼️ Workflow Success Screenshots
+
+### Backend (Render)
+![Backend Render Workflow Success](./screenshots/backend/render-workflow-success.png)
+
+### Frontend (Vercel)
+![Frontend Vercel Workflow Success](./screenshots/frontend/vercel-workflow-success.png)
+
+## 🛠️ Technology Stack
+
+### Backend
+- **Runtime**: Node.js
+- **Framework**: Express.js
+- **Database**: MongoDB with Mongoose
+- **Authentication**: JWT with `bcryptjs`
+- **Real-time**: Socket.IO
+- **Security**: Helmet, CORS, Rate Limiting
+- **Validation**: express-validator
+
+### Frontend
+- **Framework**: React.js with Vite
+- **State Management**: React Context / Hooks (can be extended with Redux)
+- **UI & Animations**: Framer Motion, CSS
+- **HTTP Client**: Axios
+- **Routing**: React Router
+
+## 📸 Screenshots
+
+```
+Tushikane/
+└── screenshots/
+    ├── home/              # Homepage screenshots
+    ├── projectpulse/      # Project Pulse screenshots
+    ├── volunteers/        # Volunteers page screenshots
+    ├── donors/           # Donors page screenshots
+    ├── chathub/          # Chat Hub screenshots
+    ├── admin/            # Admin Dashboard screenshots
+    └── contact/          # Contact page screenshots
+```
 
 ### 🏠 Home
 - Landing page with key features
@@ -76,92 +218,6 @@ A modern, full-stack web application that connects volunteers, donors, and commu
 
 ![Contact](./screenshots/contact/contacts.png)
 
-## 📁 Project Structure
-
-```
-Tushikane/
-├── backend/
-│   ├── config/
-│   ├── controllers/
-│   ├── db/
-│   ├── middleware/
-│   ├── models/
-│   ├── routes/
-│   ├── utils/
-│   ├── Dockerfile
-│   ├── package.json
-│   ├── pnpm-lock.yaml
-│   ├── seed.js
-│   ├── server.js
-│   ├── test-mongo.js
-│   ├── testDatabase.js
-│   ├── testMongo.js
-│
-├── frontend/
-│   ├── public/
-│   │   └── images/
-│   │       └── logo/
-│   │           └── tushikane_logo.png
-│   ├── src/
-│   │   ├── components/
-│   │   ├── pages/
-│   │   ├── services/
-│   │   ├── styles/
-│   │   ├── App.jsx
-│   │   ├── App.js
-│   │   ├── App.css
-│   │   └── main.jsx
-│   ├── jest.config.js
-│   ├── babel.config.js
-│   ├── setupTests.js
-│   ├── vite.config.mjs
-│   ├── Dockerfile
-│   ├── index.html
-│   ├── package.json
-│   └── pnpm-lock.yaml
-│
-├── .github/
-│   └── workflows/
-│       ├── backend.yaml
-│       └── frontend.yaml
-├── screenshots/
-│   ├── about/
-│   ├── admin/
-│   ├── contact/
-│   ├── donors/
-│   ├── home/
-│   ├── projectpulse/
-│   └── volunteers/
-├── docker-compose.yml
-├── package.json
-├── package-lock.json
-├── pnpm-lock.yaml
-├── README.md
-└── vercel.json
-```
-
-## 📸 Screenshots
-
-```
-Tushikane/
-└── screenshots/
-    ├── home/              # Homepage screenshots
-    ├── projectpulse/      # Project Pulse screenshots
-    ├── volunteers/        # Volunteers page screenshots
-    ├── donors/           # Donors page screenshots
-    ├── chathub/          # Chat Hub screenshots
-    ├── admin/            # Admin Dashboard screenshots
-    └── contact/          # Contact page screenshots
-```
-
-## 🖼️ Render Backend Logs Screenshot
-
-Add a screenshot here showing successful backend logs from Render to prove the backend ran:
-
-```
-![Render Backend Logs](./screenshots/backend/render-logs.png)
-```
-
 ## 🚀 Quick Start
 
 ### Prerequisites
@@ -199,53 +255,7 @@ Add a screenshot here showing successful backend logs from Render to prove the b
     pnpm run dev
     ```
     - The backend API will be available at `http://localhost:5000`
-    - The frontend will be available at `http://localhost:5173` (or as specified by Vite).
-
-## 🔗 API Endpoints
-
-### Authentication
-- `POST /api/auth/register` - Register new user
-- `POST /api/auth/login` - User login
-- `GET /api/auth/me` - Get current user
-- `PUT /api/auth/profile` - Update profile
-
-### Help Requests
-- `GET /api/help-requests` - Get all help requests
-- `POST /api/help-requests` - Create help request
-- `GET /api/help-requests/:id` - Get single request
-- `PUT /api/help-requests/:id` - Update request
-- `DELETE /api/help-requests/:id` - Delete request
-- `POST /api/help-requests/:id/volunteer` - Volunteer for request
-
-### Users
-- `GET /api/users/volunteers` - Get volunteers
-- `GET /api/users/:id` - Get user profile
-
-### Frontend Features
-- 🔄 User authentication and registration
-- 🔄 Help request creation and management
-- 🔄 Volunteer discovery and connection
-- 🔄 Real-time chat hub with Socket.IO
-- 🔄 Responsive design for mobile/desktop
-- 🔄 Project and donor tracking
-
-## 🛠️ Technology Stack
-
-### Backend
-- **Runtime**: Node.js
-- **Framework**: Express.js
-- **Database**: MongoDB with Mongoose
-- **Authentication**: JWT with `bcryptjs`
-- **Real-time**: Socket.IO
-- **Security**: Helmet, CORS, Rate Limiting
-- **Validation**: express-validator
-
-### Frontend
-- **Framework**: React.js with Vite
-- **State Management**: React Context / Hooks (can be extended with Redux)
-- **UI & Animations**: Framer Motion, CSS
-- **HTTP Client**: Axios
-- **Routing**: React Router
+    - The frontend will be available at `http://localhost:3002` (or as specified by Vite).
 
 ## 🔐 User Roles
 
@@ -295,20 +305,6 @@ Add a screenshot here showing successful backend logs from Render to prove the b
 }
 ```
 
-## 🚀 Deployment
-
-This project is configured for continuous deployment using GitHub Actions.
-
-### Backend (Render)
-- The backend is automatically deployed to **Render** from the `backend/` directory.
-- The CI/CD pipeline in `.github/workflows/backend.yaml` handles testing, building a Docker image, and deploying.
-- A live instance is running on Render, connected to a MongoDB Atlas database.
-
-### Frontend (Vercel)
-- The frontend is automatically deployed to **Vercel** from the `frontend/` directory.
-- The CI/CD pipeline in `.github/workflows/frontend.yaml` handles testing, building, and deploying to Vercel.
-- The production build is optimized by Vite.
-
 ## 🤝 Contributing
 
 1. Fork the repository
@@ -319,44 +315,12 @@ This project is configured for continuous deployment using GitHub Actions.
 
 ## 📝 License
 
-This project is licensed under the MIT License.
+- This project was part of a PLP Final project under instructor Dedan Okware.
 
 ## 👤 Maker
 
 **Daniel Chege Njenga** - Creator and Developer
 
-## 🙏 Acknowledgments
-
-- **Msaada kwa Jamii** - "Help for the Community"
-- Built with modern web technologies
-- Designed for humanitarian impact
-
 ---
 
 **Tushikane** - Making a difference, one request at a time. 🌍❤️ 
-
-## ⚙️ CI/CD Operations
-
-This project uses **GitHub Actions** for continuous integration and deployment:
-
-### Frontend (Vercel)
-- Workflow: `.github/workflows/frontend.yaml`
-- On every push or pull request to `main` (affecting `frontend/**`):
-  1. Installs dependencies and runs tests for the frontend.
-  2. Builds the frontend with Vite.
-  3. Deploys the production build to Vercel using the Vercel CLI and project secrets.
-- Secrets required: `VERCEL_TOKEN`, `VERCEL_PROJECT_ID`, `VERCEL_ORG_ID`
-- Vercel Root Directory: `frontend`
-
-### Backend (Render)
-- Workflow: `.github/workflows/backend.yaml`
-- On every push or pull request to `main` (affecting `backend/**`):
-  1. Installs dependencies and runs tests for the backend.
-  2. Builds and pushes a Docker image to GitHub Container Registry.
-  3. Deploys the backend to Render using the Render API and project secrets.
-- Secrets required: `RENDER_API_KEY`, `RENDER_SERVICE_ID`
-
-### General
-- All workflows run on Ubuntu runners.
-- All dependencies are managed with `pnpm` for fast, reliable installs.
-- Build/test failures or missing secrets will prevent deployment. 
