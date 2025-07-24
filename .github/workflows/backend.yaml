@@ -93,7 +93,7 @@ jobs:
     
     steps:
     - name: Deploy to Render
-      uses: render-examples/gh-action-deploy@v1
+      uses: render-examples/gh-action-deploy@main
       with:
         service-id: ${{ secrets.RENDER_SERVICE_ID }}
         api-key: ${{ secrets.RENDER_API_KEY }}
