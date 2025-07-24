@@ -93,8 +93,8 @@ jobs:
     
     steps:
     - name: Deploy to Render
-      uses: render-actions/deploy@v1
+      uses: render-examples/gh-action-deploy@v1
       with:
-        api-key: ${{ secrets.RENDER_API_KEY }}
         service-id: ${{ secrets.RENDER_SERVICE_ID }}
-        image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+        api-key: ${{ secrets.RENDER_API_KEY }}
+        image-url: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
