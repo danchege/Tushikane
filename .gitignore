@@ -30,4 +30,4 @@ Thumbs.db
 .vscode/
 
 # pnpm
-pnpm-lock.yaml 
+# pnpm-lock.yaml 
