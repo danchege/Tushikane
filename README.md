@@ -78,7 +78,7 @@ Tushikane/
 
 ### ChatHub (Real-Time Community Chat)
 
-![ChatHub Demo](screenshots/chathub/chathub-demo.png)
+![ChatHub Demo](screenshots/chat/chat.png)
 
 **ChatHub** is the heart of Tushikane's real-time community engagement. It allows users to:
 - Join the chat instantly by entering a username (no registration required).
@@ -266,7 +266,7 @@ Tushikane/
 - Group chat for project discussions
 - File sharing and emoji support
 
-![Chat Hub](./screenshots/chathub/chathub.png)
+![Chat Hub](./screenshots/chat/chat.png)
 
 ### 📋 Admin Dashboard
 - User management
