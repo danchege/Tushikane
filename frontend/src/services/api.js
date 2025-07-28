@@ -68,7 +68,7 @@ export const getDonationStats = () => api.get('/donations/stats');
 
 // Contact API
 export const sendMessage = (message) => api.post('/contact', message);
-export const getMessages = () => api.get('/contact');
+export const getMessages = () => api.get('/contact/chat');
 export const updateMessage = (id, message) => api.put(`/contact/${id}`, message);
 export const deleteMessage = (id) => api.delete(`/contact/${id}`);
 export const getMessageStats = () => api.get('/contact/stats');

@@ -1,7 +1,36 @@
 const express = require('express');
 const router = express.Router();
 const ContactMessage = require('../models/ContactMessage');
+const Message = require('../models/Message');
 const auth = require('../middleware/auth');
+const mongoose = require('mongoose'); // Added for MongoDB connection check
+
+// Get chat messages (no auth required for real-time chat)
+router.get('/chat', async (req, res) => {
+  try {
+    // Check if MongoDB is connected
+    if (mongoose.connection.readyState !== 1) {
+      // MongoDB not connected, return empty response for testing
+      return res.json({
+        success: true,
+        messages: [],
+        chats: []
+      });
+    }
+    
+    const messages = await Message.find().sort({ createdAt: -1 }).limit(50);
+    res.json({
+      success: true,
+      messages: messages,
+      chats: [] // For compatibility with existing frontend
+    });
+  } catch (error) {
+    res.status(500).json({ 
+      success: false,
+      message: error.message 
+    });
+  }
+});
 
 // Get all contact messages
 router.get('/', auth, async (req, res) => {

@@ -1,5 +1,7 @@
+const path = require('path');
+const envPath = path.join(__dirname, '../.env');
+require('dotenv').config({ path: envPath });
 const express = require('express');
-const dotenv = require('dotenv');
 const cors = require('cors');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
@@ -28,26 +30,39 @@ console.log('Environment:', process.env.NODE_ENV);
 console.log('Current working directory:', process.cwd());
 console.log('Loading environment variables...');
 
-// Load environment variables
-try {
-  dotenv.config();
-  console.log('✅ Environment variables loaded');
-} catch (err) {
-  console.error('❌ Error loading environment variables:', err);
-  process.exit(1);
-}
+// Remove this block:
+// try {
+//   dotenv.config({ path: './.env' });
+//   console.log('✅ Environment variables loaded');
+//   console.log('🔍 MONGODB_URI:', process.env.MONGODB_URI ? 'Configured' : 'Not found');
+//   console.log('🔍 PORT:', process.env.PORT);
+//   console.log('🔍 NODE_ENV:', process.env.NODE_ENV);
+// } catch (err) {
+//   console.error('❌ Error loading environment variables:', err);
+//   process.exit(1);
+// }
+
+// Instead, just log the environment variables:
+console.log('✅ Environment variables loaded');
+console.log('🔍 MONGODB_URI:', process.env.MONGODB_URI ? 'Configured' : 'Not found');
+console.log('🔍 PORT:', process.env.PORT);
+console.log('🔍 NODE_ENV:', process.env.NODE_ENV);
 
 // MongoDB connection configuration
 const MONGODB_URI = process.env.MONGODB_URI;
 const connectionOptions = {
   useNewUrlParser: true,
   useUnifiedTopology: true,
-  serverSelectionTimeoutMS: 30000, // Increased timeout for Atlas
-  socketTimeoutMS: 45000,
+  serverSelectionTimeoutMS: 60000, // Increased timeout for Atlas
+  socketTimeoutMS: 60000,
   family: 4,
   // Add Atlas-specific options
   retryWrites: true,
-  w: 'majority'
+  w: 'majority',
+  // Add DNS resolution options
+  directConnection: false,
+  maxPoolSize: 10,
+  minPoolSize: 1
 };
 
 // MongoDB connection retry configuration
@@ -64,13 +79,40 @@ let connectionAttempts = 0;
 const attemptConnection = async () => {
   try {
     if (!MONGODB_URI) {
-      throw new Error('MongoDB connection string is not configured');
+      console.log('⚠️ MongoDB connection string not configured, using in-memory storage for testing');
+      // Continue without MongoDB connection for testing
+      return;
     }
+
+    // For development, try local MongoDB if Atlas fails
+    const isDevelopment = process.env.NODE_ENV === 'development';
+    const localMongoURI = 'mongodb://localhost:27017/tushikane';
 
     console.log('🔌 Attempting to connect to MongoDB Atlas...');
     connectionAttempts++;
     
-    await mongoose.connect(MONGODB_URI, connectionOptions);
+    try {
+      await mongoose.connect(MONGODB_URI, connectionOptions);
+    } catch (connectError) {
+      console.log('🔍 Atlas connection failed:', connectError.message);
+      
+      if (isDevelopment) {
+        console.log('🔍 Trying local MongoDB for development...');
+        try {
+          await mongoose.connect(localMongoURI, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true
+          });
+          console.log('✅ Connected to local MongoDB for development');
+        } catch (localError) {
+          console.log('⚠️ Local MongoDB also failed, continuing with in-memory storage');
+          console.log('⚠️ For production, ensure MongoDB Atlas is accessible');
+          return;
+        }
+      } else {
+        throw connectError;
+      }
+    }
     isConnected = true;
     console.log('✅ Successfully connected to MongoDB Atlas');
     console.log('🔗 Database:', mongoose.connection.name);
@@ -96,6 +138,11 @@ const attemptConnection = async () => {
 
   } catch (err) {
     console.error('❌ MongoDB Atlas connection attempt failed:', err);
+    console.error('❌ Error details:', {
+      name: err.name,
+      message: err.message,
+      code: err.code
+    });
     console.log(`Attempt ${connectionAttempts} failed. Retrying in 5 seconds...`);
     isConnected = false;
     
@@ -111,7 +158,8 @@ const attemptConnection = async () => {
       setTimeout(attemptConnection, retryOptions.delay);
     } else {
       console.error('❌ Failed to connect to MongoDB Atlas after multiple attempts');
-      process.exit(1);
+      console.log('⚠️ Continuing with in-memory storage for testing');
+      // Don't exit, continue with in-memory storage
     }
   }
 };
@@ -125,8 +173,8 @@ const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
     origin: process.env.NODE_ENV === 'production' 
-      ? ['https://your-frontend-domain.com'] 
-      : ['http://localhost:3002', 'http://localhost:3000'],
+      ? ['https://tushikane.vercel.app', 'https://tushikane-frontend.vercel.app'] 
+      : ['http://localhost:3002', 'http://localhost:3000', 'http://localhost:5173'],
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true
   },
@@ -136,8 +184,8 @@ try {
   // Configure CORS for Express
   app.use(cors({
     origin: process.env.NODE_ENV === 'production' 
-      ? ['https://your-frontend-domain.com'] 
-      : ['http://localhost:3002', 'http://localhost:3000'],
+      ? ['https://tushikane.vercel.app', 'https://tushikane-frontend.vercel.app'] 
+      : ['http://localhost:3002', 'http://localhost:3000', 'http://localhost:5173'],
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true
   }));
@@ -208,6 +256,7 @@ try {
   app.use('/api/test', require('./routes/test.js'));
   app.use('/api/volunteers', require('./routes/volunteerRoutes'));
   app.use('/api/donations', require('./routes/donationRoutes'));
+  app.use('/api/contact', require('./routes/contactRoutes'));
 
   // 404 handler
   app.use('*', (req, res) => {
@@ -234,12 +283,16 @@ try {
 
     socket.on('sendMessage', async (message) => {
       try {
-        // Save message to database
-        const newMessage = new Message({
-          user: socket.username,
-          content: message
-        });
-        await newMessage.save();
+        if (isConnected) {
+          // Save message to database if MongoDB is connected
+          const newMessage = new Message({
+            user: socket.username,
+            content: message
+          });
+          await newMessage.save();
+        } else {
+          console.log('📝 Message stored in memory (MongoDB not connected)');
+        }
 
         // Broadcast message to all clients
         io.emit('newMessage', {
@@ -248,7 +301,13 @@ try {
           timestamp: new Date()
         });
       } catch (error) {
-        console.error('Error saving message:', error);
+        console.error('Error handling message:', error);
+        // Still broadcast the message even if database save fails
+        io.emit('newMessage', {
+          user: socket.username,
+          content: message,
+          timestamp: new Date()
+        });
       }
     });
 

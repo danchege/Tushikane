@@ -8,7 +8,7 @@ import ProjectPulse from './pages/ProjectPulse';
 import Volunteers from './pages/Volunteers';
 import Donors from './pages/Donors';
 import Contact from './pages/Contact';
-import ChatHub from './components/ChatHub';
+import ChatHub from './pages/ChatHub';
 import Admin from './pages/Admin';
 import './App.css';
 
