@@ -124,20 +124,14 @@ const ChatHub = () => {
                     key={index}
                     className={`message${isUser ? ' user' : ' other'}`}
                   >
-                    <span style={{
-                      fontWeight: 600,
-                      color: isUser ? '#128C7E' : '#6b7280',
-                      marginBottom: '0.2rem',
-                      fontSize: '0.93rem',
-                      alignSelf: isUser ? 'flex-end' : 'flex-start',
-                    }}>{message.user}</span>
                     <div className="message-bubble">
+                      <div className="message-header">
+                        <span className={`message-username${isUser ? ' self' : ''}`}>{message.user}</span>
+                        <span className="message-timestamp">{new Date(message.timestamp).toLocaleTimeString()}</span>
+                      </div>
                       <p className="message-content">
                         {message.content}
                       </p>
-                      <div className="message-meta">
-                        <span>{new Date(message.timestamp).toLocaleTimeString()}</span>
-                      </div>
                     </div>
                   </div>
                 );

@@ -392,8 +392,10 @@
   .chat-sidebar {
     width: 100%;
     margin-right: 0;
-    margin-bottom: 1.5rem;
-    border-radius: 1.25rem;
+    margin-bottom: 1rem;
+    border-radius: 1rem;
+    padding: 1.2rem 0.8rem;
+    min-width: 0;
   }
   .chat-main {
     padding: 1rem;
@@ -406,7 +408,9 @@
     padding: 0;
   }
   .chat-sidebar {
-    padding: 1rem 0.5rem;
+    padding: 0.8rem 0.3rem;
+    border-radius: 0.75rem;
+    margin-bottom: 0.7rem;
   }
   .chat-main {
     padding: 0.5rem;
@@ -912,4 +916,27 @@
     font-size: 0.95rem;
     padding: 0.4rem 0.8rem;
   }
+}
+
+.message-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.2rem;
+}
+
+.message-username {
+  font-weight: 700;
+  color: #2196f3;
+  font-size: 1rem;
+}
+.message-username.self {
+  color: #1565c0;
+}
+
+.message-timestamp {
+  font-size: 0.85rem;
+  color: #8fa1c7;
+  margin-left: 1rem;
+  white-space: nowrap;
 }
